@@ -2,7 +2,8 @@
 
 import unittest
 import logging
-from ingester import DbProvider
+
+import loader
 
 logging.basicConfig(
     format="%(asctime)s %(levelname)s(): %(message)s", level=logging.DEBUG
@@ -12,12 +13,11 @@ logging.basicConfig(
 class TestIngester(unittest.TestCase):
     """Ingester cases."""
 
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
-
     def test_db_provider(self):
-        db_factory = DbProvider()
-        db_factory.register_builder("pgsql", PgSqlDbBuilder)
+        pass
+        # db_factory = DbFactory()
+        # db_factory.register_builder("pgsql", PgSqlDbBuilder)
+
+
+if __name__ == "__main__":
+    unittest.main()

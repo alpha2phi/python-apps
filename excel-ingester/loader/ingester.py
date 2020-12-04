@@ -2,13 +2,11 @@
 #
 # Import excel file into any databases.
 
-import os
-import argparse
-import pandas as pd
+from dotenv import load_dotenv, find_dotenv
 
 
 class ObjectFactory:
-    """Generic object factor."""
+    """Generic object factory."""
 
     def __init__(self):
         self._builders = {}
@@ -23,24 +21,25 @@ class ObjectFactory:
         return builder(**kwargs)
 
 
-class DbProvider(ObjectFactory):
+class DbFactory(ObjectFactory):
     """Database factory."""
 
-    def get(self, service_id, **kwargs):
-        """Cret"""
-        return self.create(service_id, **kwargs)
+    def get(self, id, **kwargs):
+        """Create the database interface"""
+        return self.create(id, **kwargs)
 
 
 class PgSqlDbBuilder:
     """PostgreSQL database builder."""
 
-  def __init__(self):
+    def __init__(self):
         self._instance = None
 
     def __call__(self, host, port, user, password, **_ignored):
         if not self._instance:
             self._instance = PgSqlDb(host, port, user, password)
         return self._instance
+
 
 class PgSqlDb:
     """PostgreSQL database service."""
@@ -51,7 +50,7 @@ class PgSqlDb:
         self._user = user
         self._password = password
 
-    def test_method():
+    def test_method(self):
         print("pgsql")
 
 
