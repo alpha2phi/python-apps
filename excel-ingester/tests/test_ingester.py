@@ -26,7 +26,10 @@ class TestIngester(unittest.TestCase):
 
         db = db_provider.get("pgsql", **config)
         assert db is not None
-        logging.info(db)
+        logging.info(db.get_conn_str())
+
+    def test_ingester(self):
+        ingest("account", "testdb", "accounts")
 
 
 if __name__ == "__main__":

@@ -2,11 +2,20 @@
 #
 # Import excel file into any databases.
 
-from dotenv import load_dotenv, find_dotenv
+import logging
+import os
+import pandas as pd
+from dotenv import find_dotenv, load_dotenv
+from sqlalchemy import create_engine, inspect
 
-__all__ = ["__version__", "DbProvider", "PgSqlDbBuilder"]
+__all__ = ["__version__", "DbProvider", "PgSqlDbBuilder", "PgSqlDb", "ingest"]
 
 __version__ = "0.0.1"
+
+
+logging.basicConfig(
+    format="%(asctime)s %(levelname)s(): %(message)s", level=logging.DEBUG
+)
 
 
 def auto_str(cls):
@@ -56,9 +65,18 @@ class PgSqlDbBuilder:
     def __init__(self):
         self._instance = None
 
-    def __call__(self, host, port, user, password, **_ignored):
+    def __call__(self, **_ignored):
         if not self._instance:
-            self._instance = PgSqlDb(host, port, user, password)
+            # Load settings from .env
+            load_dotenv(find_dotenv())
+            self._instance = PgSqlDb(
+                os.getenv("POSTGRES_HOST"),
+                os.getenv("POSTGRES_PORT"),
+                os.getenv("POSTGRES_DB"),
+                os.getenv("POSTGRES_USER"),
+                os.getenv("POSTGRES_PASSWORD"),
+            )
+
         return self._instance
 
 
@@ -66,23 +84,51 @@ class PgSqlDbBuilder:
 class PgSqlDb:
     """PostgreSQL database service."""
 
-    def __init__(self, host, port, user, password):
+    def __init__(self, host, port, db, user, password):
         self._host = host
         self._port = port
+        self._db = db
         self._user = user
         self._password = password
 
+    def get_engine(self):
+        """Create and return sqlalchemy engine."""
+        return create_engine(self.get_conn_str())
 
-class MySqlDb:
-    """MySQL database."""
-
-    pass
-
-
-class ImpalaDb:
-    """Impala database."""
+    def get_conn_str(self):
+        """Return the connection string."""
+        return f"postgresql+psycopg2://{self._user}:{self._password}@{self._host}:{self._port}/{self._db}"
 
 
-def db_config_from_env():
-    """Get database configurations from environment."""
-    load_dotenv(find_dotenv())
+# Register database providers
+db_provider = DbProvider()
+db_provider.register_builder("pgsql", PgSqlDbBuilder())
+
+
+def ingest(excel_file, db_name, table_name, schema=None, db_type="pgsql"):
+    """Ingest the file into the database table."""
+    logging.info(
+        f"file = {excel_file}, db = {db_name}, table = {table_name}, db type = {db_type}"
+    )
+
+    # Create database engine
+    db = db_provider.get(db_type)
+    engine = db.get_engine()
+
+    # Inspect the target table schema
+    inspector = inspect(engine)
+    dtypes = {}
+    for column in inspector.get_columns(table_name, schema=schema):
+        dtypes[column["name"]] = column["type"]
+    logging.info(dtypes)
+
+    # Load the excel into database
+    df = pd.read_excel(excel_file)
+    df.to_sql(
+        table_name, engine, if_exists="append", chunksize=500, index=False, dtype=dtypes
+    )
+
+    # TODO - Validation
+    print(f"\nTotal records in {excel_file} - {len(df)}")
+    for c in df.columns:
+        print(f"{c} - {df[c].nunique()}")
