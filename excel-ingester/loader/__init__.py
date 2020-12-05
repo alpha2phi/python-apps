@@ -4,7 +4,26 @@
 
 from dotenv import load_dotenv, find_dotenv
 
+__all__ = ["__version__", "DbProvider", "PgSqlDbBuilder"]
+
 __version__ = "0.0.1"
+
+
+def auto_str(cls):
+    """Auto generate string representation of the object.
+
+    Args:
+        cls: Class for which to generate the __str__ method.
+    """
+
+    def __str__(self):
+        return "%s(%s)" % (
+            type(self).__name__,
+            ", ".join("%s=%s" % item for item in vars(self).items()),
+        )
+
+    cls.__str__ = __str__
+    return cls
 
 
 class ObjectFactory:
@@ -23,7 +42,7 @@ class ObjectFactory:
         return builder(**kwargs)
 
 
-class DbFactory(ObjectFactory):
+class DbProvider(ObjectFactory):
     """Database factory."""
 
     def get(self, id, **kwargs):
@@ -43,6 +62,7 @@ class PgSqlDbBuilder:
         return self._instance
 
 
+@auto_str
 class PgSqlDb:
     """PostgreSQL database service."""
 
@@ -51,9 +71,6 @@ class PgSqlDb:
         self._port = port
         self._user = user
         self._password = password
-
-    def test_method(self):
-        print("pgsql")
 
 
 class MySqlDb:

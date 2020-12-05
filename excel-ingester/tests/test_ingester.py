@@ -14,9 +14,19 @@ class TestIngester(unittest.TestCase):
     """Ingester cases."""
 
     def test_db_provider(self):
-        db_factory = DbFactory()
-        db_factory.register_builder("pgsql", PgSqlDbBuilder)
-        print("okay")
+        db_provider = DbProvider()
+        db_provider.register_builder("pgsql", PgSqlDbBuilder())
+
+        config = {
+            "host": "pgsql",
+            "port": 1200,
+            "user": "test_user",
+            "password": "test_password",
+        }
+
+        db = db_provider.get("pgsql", **config)
+        assert db is not None
+        logging.info(db)
 
 
 if __name__ == "__main__":
