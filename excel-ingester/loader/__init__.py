@@ -105,7 +105,7 @@ db_provider = DbProvider()
 db_provider.register_builder("pgsql", PgSqlDbBuilder())
 
 
-def ingest(excel_file, db_name, table_name, schema=None, db_type="pgsql"):
+def ingest(excel_file, db_name, table_name, db_type="pgsql", schema=None):
     """Ingest the file into the database table."""
     logging.info(
         f"file = {excel_file}, db = {db_name}, table = {table_name}, db type = {db_type}"

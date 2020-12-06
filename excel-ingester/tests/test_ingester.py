@@ -28,8 +28,8 @@ class TestIngester(unittest.TestCase):
         assert db is not None
         logging.info(db.get_conn_str())
 
-    def test_ingester(self):
-        ingest("account", "testdb", "accounts")
+    def test_ingest_pgsql(self):
+        ingest("data/accounts.xlsx", "testdb", "accounts", "pgsql")
 
 
 if __name__ == "__main__":
