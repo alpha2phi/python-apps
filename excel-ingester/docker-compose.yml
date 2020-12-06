@@ -3,7 +3,7 @@ services:
   pgsql:
     image: "postgres" # use latest official postgres version
     env_file:
-      - db.env # configure postgres
+      - .env # configure postgres
     volumes:
       - database-data:/var/lib/postgresql/data/ # persist data even if container shuts down
       - ./sql/init-pgsql.sql:/docker-entrypoint-initdb.d/init.sql
