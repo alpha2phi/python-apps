@@ -123,7 +123,7 @@ def ingest(excel_file, db_name, table_name, db_type="pgsql", schema=None):
     logging.info(dtypes)
 
     # Load the excel into database
-    df = pd.read_excel(excel_file)
+    df = pd.read_excel(excel_file, engine="openpyxl")
     df.to_sql(
         table_name, engine, if_exists="append", chunksize=500, index=False, dtype=dtypes
     )

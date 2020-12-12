@@ -1,13 +1,23 @@
 version: '3'
 services:
   pgsql:
-    image: "postgres" # use latest official postgres version
+    image: "postgres"
     env_file:
-      - .env # configure postgres
+      - .env
     volumes:
-      - database-data:/var/lib/postgresql/data/ # persist data even if container shuts down
+      - pgsql-data:/var/lib/postgresql/data/
       - ./sql/init-pgsql.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
+  mysql:
+    image: "mysql"
+    env_file:
+      - .env
+    volumes:
+      - mysql-data:/var/lib/myql/data/
+      - ./sql/init-mysql.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3306:3306"
 volumes:
-  database-data: # named volumes can be managed easier using docker-compose
+  pgsql-data:
+  mysql-data:
