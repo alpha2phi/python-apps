@@ -12,17 +12,17 @@ services:
     volumes:
         - ./data:/data
 
-  # streamlit:
-  #   build: streamlit
-  #   depends_on:
-  #     - fastapi
-  #   ports: 
-  #       - 8501:8501
-  #   networks:
-  #     - dev_network
-  #   container_name: streamlit
-  #   volumes:
-  #       - ./data:/data
+  streamlit:
+    build: streamlit
+    depends_on:
+      - fastapi
+    ports: 
+        - 8501:8501
+    networks:
+      - dev_network
+    container_name: streamlit
+    volumes:
+        - ./data:/data
 
 networks:
   dev_network:
