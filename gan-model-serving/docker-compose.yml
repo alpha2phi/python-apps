@@ -5,21 +5,25 @@ services:
   fastapi:
     build: fastapi
     ports: 
-      - 8000:8000
+      - 8088:8088
     networks:
-      - deploy_network
+      - dev_network
     container_name: fastapi
+    volumes:
+        - ./data:/data
 
-  streamlit:
-    build: streamlit
-    depends_on:
-      - fastapi
-    ports: 
-        - 8501:8501
-    networks:
-      - deploy_network
-    container_name: streamlit
+  # streamlit:
+  #   build: streamlit
+  #   depends_on:
+  #     - fastapi
+  #   ports: 
+  #       - 8501:8501
+  #   networks:
+  #     - dev_network
+  #   container_name: streamlit
+  #   volumes:
+  #       - ./data:/data
 
 networks:
-  deploy_network:
+  dev_network:
     driver: bridge
