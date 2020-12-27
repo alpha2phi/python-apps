@@ -1,14 +1,14 @@
 FROM tiangolo/uvicorn-gunicorn:python3.8-slim
 
-RUN mkdir /app
+RUN mkdir /fastapi
 
-COPY requirements.txt /app
+COPY requirements.txt /fastapi
 
-WORKDIR /app
+WORKDIR /fastapi
 
 RUN pip install -r requirements.txt
 
-COPY . /app
+COPY . /fastapi
 
 EXPOSE 8000
 
