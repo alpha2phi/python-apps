@@ -1,38 +1,40 @@
-
-version: '3'
+version: "3"
 
 services:
   backend:
     build: backend
     restart: always
-    ports: 
+    ports:
       - 8088:8088
     networks:
-      - dev_network
+      - app_network
     container_name: backend
+    env_file:
+      - .env
     volumes:
-        - ./data:/data
-        - ./backend:/fastapi
+      - ./data:/data
+      - ./backend:/fastapi
 
   frontend:
     build: frontend
     restart: always
     depends_on:
       - backend
-    ports: 
-        - 8501:8501
+    ports:
+      - 8501:8501
     networks:
-      - dev_network
+      - app_network
     container_name: frontend
+    env_file:
+      - .env
     volumes:
-        - ./data:/data
-        - ./frontend:/streamlit
+      - ./data:/data
+      - ./frontend:/streamlit
 
 networks:
-  dev_network:
+  app_network:
     driver: bridge
 
 volumes:
   data:
     name: data
-  
