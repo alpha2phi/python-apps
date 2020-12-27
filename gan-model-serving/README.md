@@ -1,2 +1,3 @@
-# GAN Model Serving using FastAPI and StreamLit
+# Deploy GAN Model using FastAPI and Streamlit
+
 

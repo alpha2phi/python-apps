@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit.cli import main
 
 st.title("GAN Model Serving Sample")
 
@@ -14,6 +15,3 @@ if st.button("Process"):
         pass
     else:
         st.write("Upload image!")
-
-if __name__ == "__main__":
-    st.run()
