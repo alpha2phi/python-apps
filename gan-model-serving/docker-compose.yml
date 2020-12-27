@@ -23,6 +23,7 @@ services:
     container_name: frontend
     volumes:
         - ./data:/data
+        - ./frontend:/app
 
 networks:
   dev_network:
