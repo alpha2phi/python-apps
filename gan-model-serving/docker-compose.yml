@@ -2,25 +2,25 @@
 version: '3'
 
 services:
-  fastapi:
-    build: fastapi
+  backend:
+    build: backend
     ports: 
       - 8088:8088
     networks:
       - dev_network
-    container_name: fastapi
+    container_name: backend
     volumes:
         - ./data:/data
 
   streamlit:
-    build: streamlit
+    build: frontend
     depends_on:
-      - fastapi
+      - backend
     ports: 
         - 8501:8501
     networks:
       - dev_network
-    container_name: streamlit
+    container_name: frontend
     volumes:
         - ./data:/data
 

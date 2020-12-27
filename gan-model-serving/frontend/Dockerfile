@@ -1,15 +1,15 @@
 
 FROM python:3.8-slim
 
-RUN mkdir /streamlit
+RUN mkdir /app
 
-COPY requirements.txt /streamlit
+COPY requirements.txt /app
 
-WORKDIR /streamlit
+WORKDIR /app
 
 RUN pip install -r requirements.txt
 
-COPY . /streamlit
+COPY . /app
 
 EXPOSE 8501
 
