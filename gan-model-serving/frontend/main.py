@@ -21,6 +21,7 @@ if st.button("Process"):
         # File content
         file_content = {"file": uploaded_image.getvalue()}
         st.write(file_content)
+
         # res = requests.post(f"http://backend:8080/{style}", files=files)
         # img_path = res.json()
         # image = Image.open(img_path.get("name"))

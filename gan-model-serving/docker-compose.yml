@@ -4,6 +4,7 @@ version: '3'
 services:
   backend:
     build: backend
+    restart: always
     ports: 
       - 8088:8088
     networks:
@@ -11,9 +12,11 @@ services:
     container_name: backend
     volumes:
         - ./data:/data
+        - ./backend:/fastapi
 
   frontend:
     build: frontend
+    restart: always
     depends_on:
       - backend
     ports: 
@@ -23,8 +26,13 @@ services:
     container_name: frontend
     volumes:
         - ./data:/data
-        - ./frontend:/app
+        - ./frontend:/streamlit
 
 networks:
   dev_network:
     driver: bridge
+
+volumes:
+  data:
+    name: data
+  
