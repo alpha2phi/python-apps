@@ -2,3 +2,4 @@ fastapi
 pillow
 python-multipart
 python-dotenv
+uvicorn
