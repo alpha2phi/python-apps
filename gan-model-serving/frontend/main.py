@@ -3,12 +3,12 @@ import streamlit as st
 from streamlit import uploaded_file_manager
 from streamlit.cli import main
 
-st.title("GAN Model Serving Sample")
+server_url=f"http://localhost:8088/{process}"
 
+st.title("GAN Model Serving Sample")
 st.write(
     """Serving a GAN model using FastAPI and Streamlit."""
 )  
-
 uploaded_image = st.file_uploader("Upload Image")
 
 if st.button("Process"):
