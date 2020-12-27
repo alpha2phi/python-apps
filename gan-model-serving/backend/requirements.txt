@@ -1,4 +1,6 @@
+numpy
 fastapi
 pillow
 python-multipart
 uvicorn
+torch
