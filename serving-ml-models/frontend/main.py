@@ -1,40 +1,50 @@
-import io
+import sys
+from pathlib import Path
 
-import requests
+file = Path(__file__).resolve()
+parent, root = file.parent, file.parents[1]
+sys.path.append(str(root))
+
+try:
+    sys.path.remove(str(parent))
+except ValueError: 
+    pass
+
 import streamlit as st
-from PIL import Image
-from streamlit import uploaded_file_manager
-from streamlit.cli import main
+import validators
 
-server_url=f"http://backend:8088/process"
+from models.pgan import pgan
+from models.resnext import resnext
 
-st.title("GAN Model Serving Sample")
-st.write(
-    """Serving a GAN model using FastAPI and Streamlit."""
-)  
-uploaded_image = st.file_uploader("Upload Image")
+model_pages = {
+    "PGAN": pgan,
+    "RESNEXT": resnext,
+}
 
-if st.button("Process"):
-    if uploaded_image is not None:
-        # File details
-        file_details = {"FileName": uploaded_image.name,"FileType": uploaded_image.type,"FileSize":uploaded_image.size}
-        st.write(file_details)
+intro = """
+This app serves a number of machine learning models using FastAPI and Streamlit.
+"""
 
-        # File content
-        files = {"file": uploaded_image.getvalue()}
+def draw_main_page():
+    st.write(f"""
+    # Welcome to my machine learning playground! 👋
+    """)
 
-        col1, col2 = st.beta_columns(2)
+    st.write(intro)
 
-        # Show original image
-        original_image = Image.open(uploaded_image)
-        col1.header("Original Image")
-        col1.image(original_image, use_column_width=True)
+    st.info("""
+        :point_left: **To get started, choose a model on the left sidebar.**
+    """)
 
-        # Post to server
-        res = requests.post(server_url, files=files)
-        processed_image = Image.open(io.BytesIO(res.content))
-        col2.header("Processed Image")
-        col2.image(processed_image, use_column_width=True)
 
-    else:
-        st.write("Upload image!")
+# Draw sidebar
+pages = list(model_pages.keys())
+
+st.sidebar.title(f"Machine Learning Models")
+selected_demo = st.sidebar.radio("", pages)
+
+# Draw main page
+if selected_demo in model_pages:
+    model_pages[selected_demo]()
+else:
+    draw_main_page()
