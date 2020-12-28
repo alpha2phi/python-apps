@@ -1,6 +1,6 @@
 {
     // -- for remote container
-    "python.pythonPath": "/usr/local/bin/python"
+    // "python.pythonPath": "/usr/local/bin/python"
 
-    // "python.pythonPath": "/Users/mengwangk/miniconda3/bin/python"
+    "python.pythonPath": "/Users/mengwangk/miniconda3/bin/python"
 }
