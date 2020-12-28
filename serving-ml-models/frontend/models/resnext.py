@@ -4,7 +4,6 @@ import requests
 import streamlit as st
 from PIL import Image
 from streamlit import uploaded_file_manager
-from streamlit.cli import main
 
 server_url=f"http://backend:8088/resnext"
 
