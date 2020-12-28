@@ -39,6 +39,7 @@ def draw_main_page():
 
 # Draw sidebar
 pages = list(model_pages.keys())
+pages.insert(0, "Home")
 
 st.sidebar.title(f"Machine Learning Models")
 selected_demo = st.sidebar.radio("", pages)
