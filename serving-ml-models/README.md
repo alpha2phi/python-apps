@@ -1,3 +1,10 @@
-# Deploy GAN Model using FastAPI and Streamlit
+# Serving Machine Learning Models
+
+The following models are currently being served
+
+* [dcgan](https://pytorch.org/hub/facebookresearch_pytorch-gan-zoo_dcgan/)
+* [pgan](https://pytorch.org/hub/facebookresearch_pytorch-gan-zoo_pgan/)
+* [resnext](https://pytorch.org/hub/pytorch_vision_resnext/)
+
 
 
