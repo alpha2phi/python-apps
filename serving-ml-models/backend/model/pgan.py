@@ -1,7 +1,5 @@
-import numpy as np
 import torch
 import torchvision.transforms as Transforms
-from PIL import Image
 
 use_gpu = True if torch.cuda.is_available() else False
 

@@ -3,7 +3,6 @@ import io
 import requests
 import streamlit as st
 from PIL import Image
-from streamlit import uploaded_file_manager
 
 server_url=f"http://backend:8088/resnext"
 
@@ -14,7 +13,7 @@ def resnext():
     )  
     uploaded_image = st.file_uploader("Upload Image")
 
-    if st.button("Process"):
+    if st.button("Predict"):
         if uploaded_image is not None:
             # File details
             file_details = {"FileName": uploaded_image.name,"FileType": uploaded_image.type,"FileSize":uploaded_image.size}
@@ -27,14 +26,14 @@ def resnext():
 
             # Show original image
             original_image = Image.open(uploaded_image)
-            col1.header("Original Image")
+            col1.header("Image")
             col1.image(original_image, use_column_width=True)
 
             # Post to server
             res = requests.post(server_url, files=files)
-            processed_image = Image.open(io.BytesIO(res.content))
-            col2.header("Processed Image")
-            col2.image(processed_image, use_column_width=True)
-
+            # processed_image = Image.open(io.BytesIO(res.content))
+            # col2.image(processed_image, use_column_width=True)
+            col2.header("Prediction")
+            col2.json(str(res.content.decode("utf-8")))
         else:
             st.write("Upload image!")

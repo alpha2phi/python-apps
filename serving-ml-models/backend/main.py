@@ -1,4 +1,5 @@
 import io
+import json
 import uuid
 
 import uvicorn
@@ -6,7 +7,9 @@ from fastapi import FastAPI, File, UploadFile
 from PIL import Image
 from starlette.responses import Response
 
+from model.dcgan import dcgan
 from model.pgan import pgan
+from model.resnext import resnext
 
 app = FastAPI(
     title="GAN Model Serving Tutorial",
@@ -24,7 +27,10 @@ def process_resnext(file: UploadFile = File(...)):
     image = Image.open(io.BytesIO(file_bytes))
     name = f"/data/{str(uuid.uuid4())}.jpg"
     image.save(name) 
-    return Response(file_bytes, media_type="image/jpg")
+    predictions = resnext(image)
+    return predictions
+    # return Response(content=json.dumps(predictions), media_type="application/json")
+    # return Response(file_bytes, media_type="image/jpg")
 
 @app.get("/pgan")
 def generate_pgan():
@@ -35,9 +41,9 @@ def generate_pgan():
 
 @app.get("/dcgan")
 def generate_dcgan():
-    pgan_image = pgan()
+    dcgan_image = dcgan()
     bytes_io = io.BytesIO()
-    pgan_image.save(bytes_io, format="PNG")
+    dcgan_image.save(bytes_io, format="PNG")
     return Response(bytes_io.getvalue(), media_type="image/png")
 
 if __name__ == "__main__":
