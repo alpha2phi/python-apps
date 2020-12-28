@@ -1,4 +1,3 @@
-import asyncio
 import io
 import uuid
 
@@ -7,7 +6,7 @@ from fastapi import FastAPI, File, UploadFile
 from PIL import Image
 from starlette.responses import Response
 
-from pgan import pgan
+from model.pgan import pgan
 
 app = FastAPI(
     title="GAN Model Serving Tutorial",
@@ -29,6 +28,13 @@ def process_resnext(file: UploadFile = File(...)):
 
 @app.get("/pgan")
 def generate_pgan():
+    pgan_image = pgan()
+    bytes_io = io.BytesIO()
+    pgan_image.save(bytes_io, format="PNG")
+    return Response(bytes_io.getvalue(), media_type="image/png")
+
+@app.get("/dcgan")
+def generate_dcgan():
     pgan_image = pgan()
     bytes_io = io.BytesIO()
     pgan_image.save(bytes_io, format="PNG")

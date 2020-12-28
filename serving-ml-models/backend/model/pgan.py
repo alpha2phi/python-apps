@@ -26,4 +26,3 @@ def pgan():
     generated_images = generated_images[0]
     generated_images = transform(generated_images.clamp(min=-1, max=1))
     return generated_images
-

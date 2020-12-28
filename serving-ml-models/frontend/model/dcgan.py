@@ -15,7 +15,7 @@ def dcgan():
 
     if st.button("Generate"):
         res = requests.get(server_url)
-        col1 = st.beta_columns(1)
         dcgan_image = Image.open(io.BytesIO(res.content))
-        col1.header("Processed Image")
+        col1, col2 = st.beta_columns(2)
+        col1.header("DCGAN Image")
         col1.image(dcgan_image, use_column_width=True)

@@ -13,10 +13,12 @@ except ValueError:
 import streamlit as st
 import validators
 
-from models.pgan import pgan
-from models.resnext import resnext
+from model.dcgan import dcgan
+from model.pgan import pgan
+from model.resnext import resnext
 
 model_pages = {
+    "DCGAN": dcgan,
     "PGAN": pgan,
     "RESNEXT": resnext,
 }
