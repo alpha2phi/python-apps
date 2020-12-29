@@ -12,14 +12,14 @@ from model.pgan import pgan
 from model.resnext import resnext
 
 app = FastAPI(
-    title="GAN Model Serving Tutorial",
-    description="""Serving a GAN model. Visit port 8501 for the Streamlit interface.""",
+    title="Serving Machine Learning Models",
+    description="""Visit port 8501/docs for the Streamlit interface.""",
     version="0.0.1"
 )
 
 @app.get("/")
 def home():
-    return {"message": "A GAN Model Serving Tutorial"}
+    return {"message": "Serving Machine Learning Models"}
 
 @app.post("/resnext")
 def process_resnext(file: UploadFile = File(...)):
