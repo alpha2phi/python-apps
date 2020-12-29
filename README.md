@@ -4,4 +4,4 @@
 
 * *etl-dagster* - A generic ETL framework developed using [alphalib](https://alpha2phi.medium.com/literate-programming-using-jupyter-notebook-4c2520d71597) and dagster.
 
-* *serving-ml-models* - Serving machine learning models using FastAPI and Streamlit.
+* *serving-ml-models* - [Serving machine learning models](https://alpha2phi.medium.com/serving-machine-learning-models-dcgan-pgan-resnext-using-fastapi-and-streamlit-2ef426f2e9de) using FastAPI and Streamlit.
