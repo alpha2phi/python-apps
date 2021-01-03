@@ -26,7 +26,7 @@ def process_resnext(file: UploadFile = File(...)):
     file_bytes = file.file.read()
     image = Image.open(io.BytesIO(file_bytes))
     name = f"/data/{str(uuid.uuid4())}.jpg"
-    image.save(name) 
+    image.save(name)
     predictions = resnext(image)
     return predictions
     # return Response(content=json.dumps(predictions), media_type="application/json")
@@ -35,6 +35,7 @@ def process_resnext(file: UploadFile = File(...)):
 @app.get("/pgan")
 def generate_pgan():
     pgan_image = pgan()
+    # breakpoint()
     bytes_io = io.BytesIO()
     pgan_image.save(bytes_io, format="PNG")
     return Response(bytes_io.getvalue(), media_type="image/png")
