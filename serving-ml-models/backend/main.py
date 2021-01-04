@@ -3,10 +3,10 @@ import json
 import uuid
 
 import uvicorn
-from fastapi import FastAPI, File, UploadFile
 from PIL import Image
 from starlette.responses import Response
 
+from fastapi import FastAPI, File, UploadFile
 from model.dcgan import dcgan
 from model.pgan import pgan
 from model.resnext import resnext
@@ -35,7 +35,6 @@ def process_resnext(file: UploadFile = File(...)):
 @app.get("/pgan")
 def generate_pgan():
     pgan_image = pgan()
-    # breakpoint()
     bytes_io = io.BytesIO()
     pgan_image.save(bytes_io, format="PNG")
     return Response(bytes_io.getvalue(), media_type="image/png")
