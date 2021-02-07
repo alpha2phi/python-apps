@@ -10,7 +10,7 @@ from fastapi import FastAPI, File, UploadFile
 
 app = FastAPI(
     title="Serving YOLO",
-    description="""Visit port 8501/docs for the FastAPI documentation.""",
+    description="""Visit port 8088/docs for the FastAPI documentation.""",
     version="0.0.1",
 )
 
