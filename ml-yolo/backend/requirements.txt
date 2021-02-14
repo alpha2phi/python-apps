@@ -1,5 +1,6 @@
-# ---- base
+# ---- YOLOv5
 numpy
+pandas
 Pillow
 PyYAML
 scipy
@@ -7,22 +8,22 @@ torch
 torchvision
 opencv-python
 Cython
-#tensorboard
-#tqdm
-#matplotlib
+requests
+tqdm
+tensorboard
+matplotlib
+seaborn
 
 
-# -- backend
+# -- API
 fastapi
-python-multipart
 uvicorn
+python-multipart
+python-dotenv
+
 
 # --- logging
 # wandb
-
-# --- plotting
-# seaborn
-# pandas
 
 # --- export
 # coremltools
