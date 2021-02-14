@@ -33,7 +33,24 @@ class TestYoloModel(unittest.TestCase):
         self.assertIsNotNone(results)
 
         # Results
-        results.print()
-        results.save()
+        # results.print()
+        # results.save()
+        # print(results.xyxy[0])  # print img1 predictions (pixels)
         # results.show()
-        print(results.xyxy[0])  # print img1 predictions (pixels)
+        print(results.names)
+
+        # https://github.com/ultralytics/yolov5/blob/master/models/common.py
+        names = results.names
+        detected = ""
+        if results.pred is not None:
+            pred = results.pred[0]
+            if pred is not None:
+                for c in pred[:, -1].unique():
+                    n = (pred[:, -1] == c).sum()  # detections per class
+                    detected += f"{n} {names[int(c)]}{'s' * (n > 1)}, "  # add to string
+
+        print(f"Detected: {detected}")
+
+        processed_imgs = results.render()
+        processed_img = Image.fromarray(processed_imgs[0]).convert("RGB")
+        processed_img.save("test.jpg")
