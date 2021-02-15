@@ -41,13 +41,13 @@ class TestYoloModel(unittest.TestCase):
 
         # https://github.com/ultralytics/yolov5/blob/master/models/common.py
         names = results.names
-        detected = ""
+        detected = []
         if results.pred is not None:
             pred = results.pred[0]
             if pred is not None:
                 for c in pred[:, -1].unique():
-                    n = (pred[:, -1] == c).sum()  # detections per class
-                    detected += f"{n} {names[int(c)]}{'s' * (n > 1)}, "  # add to string
+                    n = (pred[:, -1] == c).sum()
+                    detected.append(f"{n} {names[int(c)]}{'s' * (n > 1)}")
 
         print(f"Detected: {detected}")
 

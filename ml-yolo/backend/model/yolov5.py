@@ -23,9 +23,9 @@ def yolov5(img):
         if pred is not None:
             for c in pred[:, -1].unique():
                 n = (pred[:, -1] == c).sum()
-                detected_classes += f"{n} {names[int(c)]}{'s' * (n > 1)}, "
+                detected_classes.append(f"{n} {names[int(c)]}{'s' * (n > 1)}")
 
-    logging.DEBUG(f"Detected classes: {detected_classes}")
+    logging.info(f"Detected classes: {detected_classes}")
 
     rendered_imgs = results.render()
     converted_img = Image.fromarray(rendered_imgs[0]).convert("RGB")
