@@ -2,6 +2,7 @@ import torch
 import os
 import logging
 from dotenv import load_dotenv, find_dotenv
+from PIL import Image
 
 load_dotenv(find_dotenv())
 yolo_model = os.getenv("YOLO_MODEL", "yolov5s")
@@ -17,7 +18,8 @@ def yolov5(img):
     # Inference
     results = model(img)
 
-    detected_classes = ""
+    detected_classes = []
+    names = results.names
     if results.pred is not None:
         pred = results.pred[0]
         if pred is not None:

@@ -25,14 +25,20 @@ def home():
     return {"message": "YOLO - You Only Look Once"}
 
 
-@app.get("/yolov5")
+@app.post("/yolov5")
 def process_yolov5(file: UploadFile = File(...)):
     file_bytes = file.file.read()
     image = Image.open(io.BytesIO(file_bytes))
-    name = f"/data/{str(uuid.uuid4())}.jpg"
-    image.save(name)
+    name = f"/data/{str(uuid.uuid4())}.png"
+
+    # image.save(name)
+    image.filename = name
     classes, converted_img = yolov5(image)
-    return converted_img
+
+    bytes_io = io.BytesIO()
+    converted_img.save(name)
+    converted_img.save(bytes_io, format="PNG")
+    return Response(bytes_io.getvalue(), media_type="image/png")
 
 
 if __name__ == "__main__":
