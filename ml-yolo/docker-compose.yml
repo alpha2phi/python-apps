@@ -21,21 +21,21 @@ services:
       - ./data:/data
       - ./backend:/fastapi
 
-  # frontend:
-  #   build: frontend
-  #   restart: always
-  #   depends_on:
-  #     - backend
-  #   ports:
-  #     - 8501:8501
-  #   networks:
-  #     - app_network
-  #   container_name: frontend
-  #   env_file:
-  #     - .env
-  #   volumes:
-  #     - ./data:/data
-  #     - ./frontend:/streamlit
+  frontend:
+    build: frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - 8501:8501
+    networks:
+      - app_network
+    container_name: frontend
+    env_file:
+      - .env
+    volumes:
+      - ./data:/data
+      - ./frontend:/react
 
 networks:
   app_network:
