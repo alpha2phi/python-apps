@@ -1,6 +1,6 @@
 FROM node:15-alpine
 
-RUN npm install -g npm@latest
+# RUN npm install -g npm@latest
 
 WORKDIR /app
 
