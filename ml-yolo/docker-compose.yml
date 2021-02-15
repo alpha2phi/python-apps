@@ -27,7 +27,7 @@ services:
     depends_on:
       - backend
     ports:
-      - 8501:8501
+      - 3000:3000
     networks:
       - app_network
     container_name: frontend
@@ -35,7 +35,8 @@ services:
       - .env
     volumes:
       - ./data:/data
-      - ./frontend:/react
+      - ./frontend:/app
+      - /app/node_modules
 
 networks:
   app_network:
