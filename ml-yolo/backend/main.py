@@ -74,6 +74,7 @@ async def process_yolov5_ws(websocket: WebSocket, client_id: int):
     try:
         while True:
             data = await websocket.receive_text()
+            logging.info("Received---------------: ", data)
             await conn_mgr.send_message(f"You wrote: {data}", websocket)
             # await conn_mgr.broadcast(f"Client #{client_id} says: {data}")
     except WebSocketDisconnect:
