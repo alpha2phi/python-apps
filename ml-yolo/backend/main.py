@@ -1,11 +1,13 @@
 import io
 import json
+import base64
 import uuid
 import logging
 import sys
 import uvicorn
 from typing import List
 from PIL import Image
+from io import BytesIO
 from starlette.responses import Response
 from fastapi import FastAPI, File, UploadFile, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
@@ -74,8 +76,15 @@ async def process_yolov5_ws(websocket: WebSocket, client_id: int):
     try:
         while True:
             data = await websocket.receive_text()
-            logging.info("Received---------------: ", data)
+
+            # logging.info("Received---------------: ", data)
+            image = data[data.find(",") + 1 :]
+            dec = base64.b64decode(image + "===")
+            image = Image.open(BytesIO(dec)).convert("RGB")
+            image.save("/data/ws.jpg")
+
             await conn_mgr.send_message(f"You wrote: {data}", websocket)
+
             # await conn_mgr.broadcast(f"Client #{client_id} says: {data}")
     except WebSocketDisconnect:
         conn_mgr.disconnect(websocket)
