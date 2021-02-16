@@ -49,6 +49,15 @@ class ConnectionManager:
 conn_mgr = ConnectionManager()
 
 
+def base64_encode_img(img):
+    buffered = BytesIO()
+    img.save(buffered, format="PNG")
+    buffered.seek(0)
+    img_byte = buffered.getvalue()
+    encoded_img = "data:image/png;base64," + base64.b64encode(img_byte).decode()
+    return encoded_img
+
+
 @app.get("/")
 def home():
     return {"message": "YOLO - You Only Look Once"}
@@ -77,13 +86,24 @@ async def process_yolov5_ws(websocket: WebSocket, client_id: int):
         while True:
             data = await websocket.receive_text()
 
-            # logging.info("Received---------------: ", data)
+            # Convert to PIL image
             image = data[data.find(",") + 1 :]
             dec = base64.b64decode(image + "===")
             image = Image.open(BytesIO(dec)).convert("RGB")
-            image.save("/data/ws.jpg")
 
-            await conn_mgr.send_message(f"You wrote: {data}", websocket)
+            # Process the image
+            name = f"/data/{str(uuid.uuid4())}.png"
+            image.filename = name
+            classes, converted_img = yolov5(image)
+
+            result = {
+                "prediction": json.dumps(classes),
+                "output": base64_encode_img(converted_img),
+            }
+            # logging.info("-----", json.dumps(result))
+
+            # Send back the result
+            await conn_mgr.send_message(json.dumps(result), websocket)
 
             # await conn_mgr.broadcast(f"Client #{client_id} says: {data}")
     except WebSocketDisconnect:

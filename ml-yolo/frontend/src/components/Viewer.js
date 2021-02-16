@@ -11,6 +11,7 @@ const Wrapper = styled.div`
 export default function Viewer() {
   const webcamRef = useRef(null);
   const [capturedImg, setCapturedImg] = useState(null);
+  const [prediction, setPrediction] = useState("");
 
   const [isPaused, setPause] = useState(false);
   const ws = useRef(null);
@@ -33,9 +34,10 @@ export default function Viewer() {
 
     ws.current.onmessage = (event) => {
       if (isPaused) return;
-      // const message = JSON.parse(e.data);
-      // console.log("e", message);
-      console.log(event.data);
+      const message = JSON.parse(event.data);
+      // console.log(message);
+      setCapturedImg(message.output);
+      setPrediction(message.prediction);
     };
   }, [isPaused]);
 
@@ -53,7 +55,7 @@ export default function Viewer() {
 
   const capture = useCallback(() => {
     const capturedImg = webcamRef.current.getScreenshot();
-    setCapturedImg(capturedImg);
+    // setCapturedImg(capturedImg);
     // console.log(capturedImg);
     sendMessage(capturedImg);
   }, [webcamRef]);
@@ -71,6 +73,8 @@ export default function Viewer() {
         <button onClick={capture}>Capture photo</button>
       </p>
       {capturedImg && <img src={capturedImg} width="50%" />}
+
+      <p>{prediction && prediction}</p>
     </Wrapper>
   );
 }
