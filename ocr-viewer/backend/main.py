@@ -14,12 +14,12 @@ from fastapi.responses import HTMLResponse
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
-from model import yolov5
+# from model import yolov5
 
 
 # FastAPI
 app = FastAPI(
-    title="Serving YOLO",
+    title="OCR Viewer",
     description="""Visit port 8088/docs for the FastAPI documentation.""",
     version="0.0.1",
 )
@@ -60,27 +60,22 @@ def base64_encode_img(img):
 
 @app.get("/")
 def home():
-    return {"message": "YOLO - You Only Look Once"}
+    return {"message": "OCR Viewer"}
 
 
-@app.post("/yolo")
-def process_yolov5(file: UploadFile = File(...)):
+@app.post("/ocr")
+def process_ocr(file: UploadFile = File(...)):
     file_bytes = file.file.read()
     image = Image.open(io.BytesIO(file_bytes))
     name = f"/data/{str(uuid.uuid4())}.png"
 
-    # image.save(name)
-    image.filename = name
-    classes, converted_img = yolov5(image)
+    image.save(name)
 
-    bytes_io = io.BytesIO()
-    converted_img.save(name)
-    converted_img.save(bytes_io, format="PNG")
-    return Response(bytes_io.getvalue(), media_type="image/png")
+    return ""
 
 
-@app.websocket("/yolo_ws/{client_id}")
-async def process_yolov5_ws(websocket: WebSocket, client_id: int):
+@app.websocket("/ocr_ws/{client_id}")
+async def process_ocr_ws(websocket: WebSocket, client_id: int):
     await conn_mgr.connect(websocket)
     try:
         while True:
@@ -94,64 +89,22 @@ async def process_yolov5_ws(websocket: WebSocket, client_id: int):
             # Process the image
             name = f"/data/{str(uuid.uuid4())}.png"
             image.filename = name
-            classes, converted_img = yolov5(image)
+            # classes, converted_img = yolov5(image)
 
-            result = {
-                "prediction": json.dumps(classes),
-                "output": base64_encode_img(converted_img),
-            }
-            # logging.info("-----", json.dumps(result))
+            # result = {
+            #     "prediction": json.dumps(classes),
+            #     "output": base64_encode_img(converted_img),
+            # }
+            # # logging.info("-----", json.dumps(result))
 
             # Send back the result
-            await conn_mgr.send_message(json.dumps(result), websocket)
+            # await conn_mgr.send_message(json.dumps(result), websocket)
 
-            # await conn_mgr.broadcast(f"Client #{client_id} says: {data}")
+            return ""
+
     except WebSocketDisconnect:
         conn_mgr.disconnect(websocket)
         await conn_mgr.broadcast(f"Client #{client_id} left the chat")
-
-
-ws_client_html = """
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Chat</title>
-    </head>
-    <body>
-        <h1>WebSocket Chat</h1>
-        <h2>Your ID: <span id="ws-id"></span></h2>
-        <form action="" onsubmit="sendMessage(event)">
-            <input type="text" id="messageText" autocomplete="off"/>
-            <button>Send</button>
-        </form>
-        <ul id='messages'>
-        </ul>
-        <script>
-            var client_id = Date.now()
-            document.querySelector("#ws-id").textContent = client_id;
-            var ws = new WebSocket(`ws://localhost:8088/yolo_ws/${client_id}`);
-            ws.onmessage = function(event) {
-                var messages = document.getElementById('messages')
-                var message = document.createElement('li')
-                var content = document.createTextNode(event.data)
-                message.appendChild(content)
-                messages.appendChild(message)
-            };
-            function sendMessage(event) {
-                var input = document.getElementById("messageText")
-                ws.send(input.value)
-                input.value = ''
-                event.preventDefault()
-            }
-        </script>
-    </body>
-</html>
-"""
-
-
-@app.get("/yolo_client")
-async def process_yolo_client():
-    return HTMLResponse(ws_client_html)
 
 
 if __name__ == "__main__":
