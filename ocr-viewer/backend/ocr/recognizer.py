@@ -4,7 +4,7 @@ from PIL import Image
 import pytesseract
 
 
-def recognize(img, lang="eng"):
+def recognize(img, lang="eng+chi_sim"):
     """Process a PIL image."""
     extracted = pytesseract.image_to_string(img, lang=lang)
 

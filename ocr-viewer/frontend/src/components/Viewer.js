@@ -73,7 +73,7 @@ export default function Viewer() {
         <button onClick={capture}>Capture photo</button>
       </p>
       {capturedImg && (
-        <img alt="Captured image" src={capturedImg} width="50%" />
+        <img alt="Extracted text" src={capturedImg} width="50%" />
       )}
 
       <p>

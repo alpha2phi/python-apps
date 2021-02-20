@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense } from "react";
 import { ThemeProvider } from "styled-components";
 import Loader from "./components/Loader";
 import Viewer from "./components/Viewer";
