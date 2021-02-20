@@ -11,12 +11,13 @@ const Wrapper = styled.div`
 export default function Viewer() {
   const webcamRef = useRef(null);
   const [capturedImg, setCapturedImg] = useState(null);
-  const [prediction, setPrediction] = useState("");
+  const [extracted, setExtracted] = useState("");
 
   const [isPaused, setPause] = useState(false);
   const ws = useRef(null);
 
   useEffect(() => {
+    setPause(false);
     const client_id = Date.now();
     const url = `${config.WS_SERVER}/${client_id}`;
     console.log(url);
@@ -35,9 +36,9 @@ export default function Viewer() {
     ws.current.onmessage = (event) => {
       if (isPaused) return;
       const message = JSON.parse(event.data);
-      // console.log(message);
-      setCapturedImg(message.output);
-      setPrediction(message.prediction);
+      console.log(message);
+      // setCapturedImg(message.output);
+      // setExtracted(message.prediction);
     };
   }, [isPaused]);
 
@@ -77,7 +78,7 @@ export default function Viewer() {
       )}
 
       <p>
-        <h3>{prediction && prediction}</h3>
+        <h3>{extracted && extracted}</h3>
       </p>
     </Wrapper>
   );
