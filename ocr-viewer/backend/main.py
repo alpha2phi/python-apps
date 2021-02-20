@@ -67,9 +67,7 @@ def home():
 @app.post("/ocr")
 def process_ocr(file: UploadFile = File(...)):
     file_bytes = file.file.read()
-    image = Image.open(io.BytesIO(file_bytes))
-    # name = f"/data/{str(uuid.uuid4())}.png"
-    # image.save(name)
+    image = Image.open(BytesIO(file_bytes))
     return recognizer.recognize(image)
 
 
@@ -85,15 +83,15 @@ async def process_ocr_ws(websocket: WebSocket, client_id: int):
             # Convert to PIL image
             image = data[data.find(",") + 1 :]
             dec = base64.b64decode(image + "===")
-            image = Image.open(BytesIO(dec)).convert("RGB")
-            image.save("/data/capture.png")
+            image = Image.open(BytesIO(dec))
+            # image.save("/data/capture.png")
 
             # Process the image
             extracted_text = recognizer.recognize(image)
+            logging.info(f"{extracted_text =}")
             result = {
                 "extracted": json.dumps(extracted_text),
             }
-            logging.info(f"{extracted_text =}")
 
             # Send back the result
             await conn_mgr.send_message(json.dumps(result), websocket)

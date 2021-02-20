@@ -8,6 +8,10 @@ const Wrapper = styled.div`
   margin: 0 auto;
 `;
 
+const H3 = styled.h3`
+  white-space: pre-wrap;
+`;
+
 export default function Viewer() {
   const webcamRef = useRef(null);
   const [capturedImg, setCapturedImg] = useState(null);
@@ -51,11 +55,13 @@ export default function Viewer() {
     width: 1280,
     height: 720,
     facingMode: "environment", // Can be "environment" or "user"
+    screenshotQuality: 1,
   };
 
   const capture = useCallback(() => {
     const capturedImg = webcamRef.current.getScreenshot();
     setCapturedImg(capturedImg);
+    setExtracted("");
     const data = JSON.stringify({ data: capturedImg });
     sendMessage(data);
   }, [webcamRef]);
@@ -66,17 +72,17 @@ export default function Viewer() {
         audio={false}
         ref={webcamRef}
         screenshotFormat="image/jpeg"
-        width="50%"
+        width="80%"
         videoConstraints={videoConstraints}
       />
       <p>
         <button onClick={capture}>Capture photo</button>
       </p>
       {capturedImg && (
-        <img alt="Extracted text" src={capturedImg} width="50%" />
+        <img alt="Extracted text" src={capturedImg} width="80%" />
       )}
 
-      <h3>{extracted && extracted}</h3>
+      <H3>{extracted && extracted}</H3>
     </Wrapper>
   );
 }
