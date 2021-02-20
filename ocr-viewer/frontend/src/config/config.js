@@ -3,6 +3,7 @@ const config = {
   // WS_SERVER: "wss://localhost:8088/yolo_ws", // secure
 };
 
-export default {
-  ...config,
-};
+// export default {
+//   ...config,
+// };
+export default config;

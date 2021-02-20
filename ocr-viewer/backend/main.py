@@ -79,28 +79,24 @@ async def process_ocr_ws(websocket: WebSocket, client_id: int):
     try:
         while True:
             received = await websocket.receive_text()
-            data = json.loads(received)
+            parsed_data = json.loads(received)
+            data = parsed_data["data"]
 
-            # # Convert to PIL image
-            # image = data[data.find(",") + 1 :]
-            # dec = base64.b64decode(image + "===")
-            # image = Image.open(BytesIO(dec)).convert("RGB")
+            # Convert to PIL image
+            image = data[data.find(",") + 1 :]
+            dec = base64.b64decode(image + "===")
+            image = Image.open(BytesIO(dec)).convert("RGB")
+            image.save("/data/capture.png")
 
             # Process the image
-            # name = f"/data/{str(uuid.uuid4())}.png"
-            # image.filename = name
-            # classes, converted_img = yolov5(image)
-
-            # result = {
-            #     "prediction": json.dumps(classes),
-            #     "output": base64_encode_img(converted_img),
-            # }
-            # # logging.info("-----", json.dumps(result))
+            extracted_text = recognizer.recognize(image)
+            result = {
+                "extracted": json.dumps(extracted_text),
+            }
+            logging.info(f"{extracted_text =}")
 
             # Send back the result
-            # await conn_mgr.send_message(json.dumps(result), websocket)
-
-            return ""
+            await conn_mgr.send_message(json.dumps(result), websocket)
 
     except WebSocketDisconnect:
         conn_mgr.disconnect(websocket)

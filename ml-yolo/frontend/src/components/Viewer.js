@@ -76,9 +76,7 @@ export default function Viewer() {
         <img alt="Captured image" src={capturedImg} width="50%" />
       )}
 
-      <p>
-        <h3>{prediction && prediction}</h3>
-      </p>
+      <h3>{prediction && prediction}</h3>
     </Wrapper>
   );
 }

@@ -37,8 +37,7 @@ export default function Viewer() {
       if (isPaused) return;
       const message = JSON.parse(event.data);
       console.log(message);
-      // setCapturedImg(message.output);
-      // setExtracted(message.prediction);
+      setExtracted(message["extracted"]);
     };
   }, [isPaused]);
 
@@ -56,9 +55,9 @@ export default function Viewer() {
 
   const capture = useCallback(() => {
     const capturedImg = webcamRef.current.getScreenshot();
-    // setCapturedImg(capturedImg);
-    // console.log(capturedImg);
-    sendMessage(capturedImg);
+    setCapturedImg(capturedImg);
+    const data = JSON.stringify({ data: capturedImg });
+    sendMessage(data);
   }, [webcamRef]);
 
   return (
@@ -77,9 +76,7 @@ export default function Viewer() {
         <img alt="Extracted text" src={capturedImg} width="50%" />
       )}
 
-      <p>
-        <h3>{extracted && extracted}</h3>
-      </p>
+      <h3>{extracted && extracted}</h3>
     </Wrapper>
   );
 }
