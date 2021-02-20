@@ -23,7 +23,7 @@ class TestOCR(unittest.TestCase):
             "backend/test_images/image_4.jpg",
             "backend/test_images/image_5.jpg",
         ]
-        img = Image.open(imgs[4])
+        img = Image.open(imgs[2])
 
         # Simple image to string
         print(pytesseract.image_to_string(img))
@@ -31,6 +31,12 @@ class TestOCR(unittest.TestCase):
         # List of available languages
         # print(pytesseract.get_languages(config=""))
 
-        # Chinese Simplified
-        print(pytesseract.image_to_string(img, lang="chi_sim"))
+        # Get verbose data including boxes, confidences, line and page numbers
+        print(pytesseract.image_to_data(img))
 
+        # Chinese Simplified
+        print(
+            pytesseract.image_to_string(
+                "backend/test_images/image_5.jpg", lang="chi_sim"
+            )
+        )

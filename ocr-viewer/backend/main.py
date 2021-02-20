@@ -1,16 +1,19 @@
+import base64
 import io
 import json
-import base64
-import uuid
 import logging
 import sys
-import uvicorn
-from typing import List
-from PIL import Image
+import uuid
 from io import BytesIO
-from starlette.responses import Response
+from typing import List
+
+import uvicorn
 from fastapi import FastAPI, File, UploadFile, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
+from PIL import Image
+from starlette.responses import Response
+
+from ocr import recognizer
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
@@ -65,11 +68,9 @@ def home():
 def process_ocr(file: UploadFile = File(...)):
     file_bytes = file.file.read()
     image = Image.open(io.BytesIO(file_bytes))
-    name = f"/data/{str(uuid.uuid4())}.png"
-
-    image.save(name)
-
-    return ""
+    # name = f"/data/{str(uuid.uuid4())}.png"
+    # image.save(name)
+    return recognizer.recognize(image)
 
 
 @app.websocket("/ocr_ws/{client_id}")
@@ -77,16 +78,17 @@ async def process_ocr_ws(websocket: WebSocket, client_id: int):
     await conn_mgr.connect(websocket)
     try:
         while True:
-            data = await websocket.receive_text()
+            received = await websocket.receive_text()
+            data = json.loads(received)
 
-            # Convert to PIL image
-            image = data[data.find(",") + 1 :]
-            dec = base64.b64decode(image + "===")
-            image = Image.open(BytesIO(dec)).convert("RGB")
+            # # Convert to PIL image
+            # image = data[data.find(",") + 1 :]
+            # dec = base64.b64decode(image + "===")
+            # image = Image.open(BytesIO(dec)).convert("RGB")
 
             # Process the image
-            name = f"/data/{str(uuid.uuid4())}.png"
-            image.filename = name
+            # name = f"/data/{str(uuid.uuid4())}.png"
+            # image.filename = name
             # classes, converted_img = yolov5(image)
 
             # result = {
