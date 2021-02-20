@@ -14,8 +14,6 @@ from fastapi.responses import HTMLResponse
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
-# from model import yolov5
-
 
 # FastAPI
 app = FastAPI(
