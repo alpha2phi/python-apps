@@ -8,7 +8,7 @@ const Wrapper = styled.div`
   margin: 0 auto;
 `;
 
-const H3 = styled.h3`
+const Extracted = styled.div`
   white-space: pre-wrap;
 `;
 
@@ -82,7 +82,9 @@ export default function Viewer() {
         <img alt="Extracted text" src={capturedImg} width="80%" />
       )}
 
-      <H3>{extracted && extracted}</H3>
+      <h3>
+        <Extracted>{extracted && extracted}</Extracted>
+      </h3>
     </Wrapper>
   );
 }
