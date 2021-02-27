@@ -1,6 +1,7 @@
 import unittest
 
 from PIL import Image
+from ..cartoon import cartoonify
 
 
 class TestCartoon(unittest.TestCase):
@@ -14,8 +15,10 @@ class TestCartoon(unittest.TestCase):
 
     def test_model(self):
         # Images
-        imgs = [
-            "backend/test_images/image_1.png",
-        ]
-        img = Image.open(imgs[0])
+        # imgs = [
+        #     "backend/test_images/image_1.png",
+        # ]
+        # img = Image.open(imgs[0])
+        # cartoonify()
+        pass
 

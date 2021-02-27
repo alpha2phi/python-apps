@@ -6,16 +6,15 @@ import logging
 import sys
 from typing import List
 import uuid
-
 from PIL import Image
 from fastapi import FastAPI, File, UploadFile, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
 from starlette.responses import Response
 import uvicorn
 
-# from ocr import recognizer
-
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+
+from cartoon import cartoonify
 
 
 # FastAPI
