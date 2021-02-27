@@ -1,11 +1,15 @@
-import os
-import torch
-from PIL import Image
-from network.Transformer import Transformer
-
 import logging
+import os
 
-model_path = os.path.abspath("./pretrained-model")
+from PIL import Image
+import numpy as np
+import torch
+from torch.autograd import Variable
+import torchvision.transforms as transforms
+
+from ..network.Transformer import Transformer
+
+model_path = os.path.abspath("./backend/pretrained-model")
 styles = {0: "Hayao", "1": "Hosoda", 2: "Paprika", 3: "Shinkai"}
 
 gpu = torch.cuda.is_available()
@@ -37,37 +41,48 @@ models = load_models()
 
 
 def cartoonify(input_image, style_id=0, load_size=450):
-   style = styles[style_id]
+    """Cartoonify an image."""
+    style = styles[style_id]
+    model = models[style]
 
     # resize image, keep aspect ratio
     h = input_image.size[0]
     w = input_image.size[1]
-    ratio = h *1.0 / w
+    ratio = h * 1.0 / w
     if ratio > 1:
         h = load_size
-        w = int(h*1.0/ratio)
+        w = int(h * 1.0 / ratio)
     else:
-        w = opt.load_size
-            h = int(w * ratio)
+        w = load_size
+        h = int(w * ratio)
     input_image = input_image.resize((h, w), Image.BICUBIC)
+
     input_image = np.asarray(input_image)
     # RGB -> BGR
     input_image = input_image[:, :, [2, 1, 0]]
     input_image = transforms.ToTensor()(input_image).unsqueeze(0)
+
     # preprocess, (-1, 1)
     input_image = -1 + 2 * input_image
-    if opt.gpu > -1:
-        input_image = Variable(input_image, volatile=True).cuda()
+    if gpu:
+        input_image = Variable(input_image).cuda()
     else:
-        input_image = Variable(input_image, volatile=True).float()
+        input_image = Variable(input_image).float()
+
     # forward
-    output_image = model(input_image)
-    output_image = output_image[0]
+    with torch.no_grad():
+        output_image = model(input_image)
+        output_image = output_image[0]
+
     # BGR -> RGB
     output_image = output_image[[2, 1, 0], :, :]
+
     # deprocess, (0, 1)
     output_image = output_image.data.cpu().float() * 0.5 + 0.5
-    # save
-    vutils.save_image(output_image, os.path.join(opt.output_dir, files[:-4] + '_' + opt.style + '.jpg'))
 
+    output_image = output_image.numpy()
+    output_image = np.uint8(output_image.transpose(1, 2, 0) * 255)
+    output_image = Image.fromarray(output_image)
+
+    return output_image
 

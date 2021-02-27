@@ -14,11 +14,10 @@ class TestCartoon(unittest.TestCase):
         pass
 
     def test_model(self):
-        # Images
-        # imgs = [
-        #     "backend/test_images/image_1.png",
-        # ]
-        # img = Image.open(imgs[0])
-        # cartoonify()
-        pass
+        imgs = [
+            "backend/test_images/sky.jpg",
+        ]
+        img = Image.open(imgs[0])
+        output_image = cartoonify(img)
+        output_image.save("output.jpg")
 
