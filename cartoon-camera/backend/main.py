@@ -1,5 +1,4 @@
 import base64
-import io
 from io import BytesIO
 import json
 import logging
@@ -8,8 +7,6 @@ from typing import List
 import uuid
 from PIL import Image
 from fastapi import FastAPI, File, UploadFile, WebSocket, WebSocketDisconnect
-from fastapi.responses import HTMLResponse
-from starlette.responses import Response
 import uvicorn
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
@@ -19,7 +16,7 @@ from cartoon import cartoonify
 
 # FastAPI
 app = FastAPI(
-    title="OCR Viewer",
+    title="Cartoon Camera",
     description="""Visit port 8088/docs for the FastAPI documentation.""",
     version="0.0.1",
 )
@@ -64,15 +61,14 @@ def home():
 
 
 @app.post("/cartoon")
-def process_ocr(file: UploadFile = File(...)):
+def process_cartoon(file: UploadFile = File(...), style=0, load_size=450):
     file_bytes = file.file.read()
     image = Image.open(BytesIO(file_bytes))
-    # return recognizer.recognize(image)
-    return ""
+    return cartoonify(image, style, load_size)
 
 
 @app.websocket("/cartoon/{client_id}")
-async def process_ocr_ws(websocket: WebSocket, client_id: int):
+async def process_cartoon_ws(websocket: WebSocket, client_id: int):
     await conn_mgr.connect(websocket)
     try:
         while True:

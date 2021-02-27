@@ -7,9 +7,9 @@ import torch
 from torch.autograd import Variable
 import torchvision.transforms as transforms
 
-from ..network.Transformer import Transformer
+from network.Transformer import Transformer
 
-model_path = os.path.abspath("./backend/pretrained-model")
+model_path = os.path.abspath("./pretrained-model")
 styles = {0: "Hayao", "1": "Hosoda", 2: "Paprika", 3: "Shinkai"}
 
 gpu = torch.cuda.is_available()
@@ -42,8 +42,9 @@ models = load_models()
 
 def cartoonify(input_image, style_id=0, load_size=450):
     """Cartoonify an image."""
-    style = styles[style_id]
+    style = styles[int(style_id)]
     model = models[style]
+    load_size = int(load_size)
 
     # resize image, keep aspect ratio
     h = input_image.size[0]
