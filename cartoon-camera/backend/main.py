@@ -6,6 +6,7 @@ import sys
 from typing import List
 import uuid
 from PIL import Image
+from starlette.responses import Response
 from fastapi import FastAPI, File, UploadFile, WebSocket, WebSocketDisconnect
 import uvicorn
 
@@ -64,7 +65,10 @@ def home():
 def process_cartoon(file: UploadFile = File(...), style=0, load_size=450):
     file_bytes = file.file.read()
     image = Image.open(BytesIO(file_bytes))
-    return cartoonify(image, style, load_size)
+    output_image = cartoonify(image, style, load_size)
+    bytes_io = BytesIO()
+    output_image.save(bytes_io, format="PNG")
+    return Response(bytes_io.getvalue(), media_type="image/png")
 
 
 @app.websocket("/cartoon/{client_id}")

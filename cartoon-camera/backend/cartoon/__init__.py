@@ -10,7 +10,7 @@ import torchvision.transforms as transforms
 from network.Transformer import Transformer
 
 model_path = os.path.abspath("./pretrained-model")
-styles = {0: "Hayao", "1": "Hosoda", 2: "Paprika", 3: "Shinkai"}
+styles = {0: "Hayao", 1: "Hosoda", 2: "Paprika", 3: "Shinkai"}
 
 gpu = torch.cuda.is_available()
 
