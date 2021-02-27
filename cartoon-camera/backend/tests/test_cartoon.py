@@ -4,7 +4,7 @@ from PIL import Image
 
 
 class TestCartoon(unittest.TestCase):
-    """Test OCR."""
+    """Test cartoon."""
 
     def setUp(self):
         pass
