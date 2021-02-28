@@ -82,6 +82,13 @@ def home():
 
 @app.post("/cartoon")
 def process_cartoon(file: UploadFile = File(...), style=0, load_size=450):
+    """
+    Transform uploaded image file into cartoon image.
+
+    :param file UploadFile: Uploaded image.
+    :param style int: Style to applic (0 - Hayao, 1 - Hosoda, 2 - Paprika, 3 - Shinkai).
+    :param load_size int: Default to 450.
+    """
     file_bytes = file.file.read()
     image = Image.open(BytesIO(file_bytes))
     output_image = cartoonify(image, style, load_size)
