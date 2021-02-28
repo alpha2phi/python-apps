@@ -21,22 +21,22 @@ services:
       - ./data:/data
       - ./backend:/fastapi
 
-  # frontend:
-  #   build: frontend
-  #   restart: always
-  #   depends_on:
-  #     - backend
-  #   ports:
-  #     - 3000:3000
-  #   networks:
-  #     - app_network
-  #   container_name: frontend
-  #   env_file:
-  #     - .env
-  #   volumes:
-  #     - ./data:/data
-  #     - ./frontend:/app
-  #     - /app/node_modules
+  frontend:
+    build: frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - 3000:3000
+    networks:
+      - app_network
+    container_name: frontend
+    env_file:
+      - .env
+    volumes:
+      - ./data:/data
+      - ./frontend:/app
+      - /app/node_modules
 
 networks:
   app_network:
