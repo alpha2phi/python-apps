@@ -9,7 +9,7 @@ function Page() {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
-        <h1>Text Recognition</h1>
+        <h1>Cartoon Camera</h1>
         <Viewer />
       </div>
     </ThemeProvider>

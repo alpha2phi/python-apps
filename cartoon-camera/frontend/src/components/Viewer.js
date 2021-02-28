@@ -2,20 +2,40 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import Webcam from "react-webcam";
 import styled from "styled-components";
 import config from "../config/config";
+import { useFormFields } from "../libs/hooksLib";
 
 const Wrapper = styled.div`
   display: block;
   margin: 0 auto;
 `;
 
-const Extracted = styled.div`
-  white-space: pre-wrap;
+const Select = styled.select`
+  width: 50%;
+  height: 50px;
+  background: lightgray;
+  color: black;
+  padding-left: 5px;
+  font-size: 14px;
+  border: none;
+  margin-left: 10px;
+  margin-bottom: 30px;
+
+  option {
+    color: black;
+    background: lightgray;
+    display: flex;
+    white-space: pre;
+    min-height: 20px;
+    padding: 0px 2px 1px;
+  }
 `;
 
 export default function Viewer() {
+  const [fields, handleFieldChange] = useFormFields({
+    style: "2",
+  });
   const webcamRef = useRef(null);
-  const [capturedImg, setCapturedImg] = useState(null);
-  const [extracted, setExtracted] = useState("");
+  const [cartoonImg, setCartoonImg] = useState(null);
 
   const [isPaused, setPause] = useState(false);
   const ws = useRef(null);
@@ -40,8 +60,8 @@ export default function Viewer() {
     ws.current.onmessage = (event) => {
       if (isPaused) return;
       const message = JSON.parse(event.data);
+      setCartoonImg(message.output);
       console.log(message);
-      setExtracted(message["extracted"]);
     };
   }, [isPaused]);
 
@@ -60,9 +80,7 @@ export default function Viewer() {
 
   const capture = useCallback(() => {
     const capturedImg = webcamRef.current.getScreenshot();
-    setCapturedImg(capturedImg);
-    setExtracted("");
-    const data = JSON.stringify({ data: capturedImg });
+    const data = JSON.stringify({ data: capturedImg, style: fields.style });
     sendMessage(data);
   }, [webcamRef]);
 
@@ -76,15 +94,17 @@ export default function Viewer() {
         videoConstraints={videoConstraints}
       />
       <p>
+        Select Style:
+        <Select id="style" onChange={handleFieldChange} value={fields.style}>
+          <option value="0">Hayao</option>
+          <option value="1">Hosoda</option>
+          <option value="2">Paprika</option>
+          <option value="3">Shinkai</option>
+        </Select>
+        <br />
         <button onClick={capture}>Capture photo</button>
       </p>
-      {capturedImg && (
-        <img alt="Extracted text" src={capturedImg} width="80%" />
-      )}
-
-      <h3>
-        <Extracted>{extracted && extracted}</Extracted>
-      </h3>
+      {cartoonImg && <img alt="Cartoon" src={cartoonImg} width="80%" />}
     </Wrapper>
   );
 }

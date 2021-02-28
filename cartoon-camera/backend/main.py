@@ -56,6 +56,25 @@ def base64_encode_img(img):
     return encoded_img
 
 
+def process_incoming_request(payload):
+    parsed_data = json.loads(payload)
+    data = parsed_data["data"]
+    style = parsed_data["style"]
+
+    # Convert to PIL image
+    image = data[data.find(",") + 1 :]
+    dec = base64.b64decode(image + "===")
+    image = Image.open(BytesIO(dec))
+
+    # Process the image
+    cartoon_img = cartoonify(image, style)
+
+    result = {
+        "output": base64_encode_img(cartoon_img),
+    }
+    return result
+
+
 @app.get("/")
 def home():
     return {"message": "Cartoon Camera"}
@@ -71,28 +90,15 @@ def process_cartoon(file: UploadFile = File(...), style=0, load_size=450):
     return Response(bytes_io.getvalue(), media_type="image/png")
 
 
-@app.websocket("/cartoon/{client_id}")
+@app.websocket("/cartoon_ws/{client_id}")
 async def process_cartoon_ws(websocket: WebSocket, client_id: int):
     await conn_mgr.connect(websocket)
     try:
         while True:
             received = await websocket.receive_text()
-            parsed_data = json.loads(received)
-            data = parsed_data["data"]
 
-            # Convert to PIL image
-            image = data[data.find(",") + 1 :]
-            dec = base64.b64decode(image + "===")
-            image = Image.open(BytesIO(dec))
-            # image.save("/data/capture.png")
-
-            # # Process the image
-            # extracted_text = recognizer.recognize(image)
-            # logging.info(f"{extracted_text =}")
-            # result = {
-            #     "extracted": json.dumps(extracted_text),
-            # }
-            result = {}
+            # Process request
+            result = process_incoming_request(received)
 
             # Send back the result
             await conn_mgr.send_message(json.dumps(result), websocket)
