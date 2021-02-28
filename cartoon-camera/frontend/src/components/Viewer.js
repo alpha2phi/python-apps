@@ -10,8 +10,8 @@ const Wrapper = styled.div`
 `;
 
 const Select = styled.select`
-  width: 50%;
-  height: 50px;
+  width: 30%;
+  height: 40px;
   background: lightgray;
   color: black;
   padding-left: 5px;
