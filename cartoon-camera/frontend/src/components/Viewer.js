@@ -80,9 +80,10 @@ export default function Viewer() {
 
   const capture = useCallback(() => {
     const capturedImg = webcamRef.current.getScreenshot();
+
     const data = JSON.stringify({ data: capturedImg, style: fields.style });
     sendMessage(data);
-  }, [webcamRef]);
+  }, [webcamRef, fields]);
 
   return (
     <Wrapper>
@@ -90,7 +91,7 @@ export default function Viewer() {
         audio={false}
         ref={webcamRef}
         screenshotFormat="image/jpeg"
-        width="80%"
+        width="50%"
         videoConstraints={videoConstraints}
       />
       <p>
@@ -104,7 +105,7 @@ export default function Viewer() {
         <br />
         <button onClick={capture}>Capture photo</button>
       </p>
-      {cartoonImg && <img alt="Cartoon" src={cartoonImg} width="80%" />}
+      {cartoonImg && <img alt="Cartoon" src={cartoonImg} width="50%" />}
     </Wrapper>
   );
 }
