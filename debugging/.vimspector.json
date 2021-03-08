@@ -1,6 +1,19 @@
 {
   "configurations": {
-    "<name>: Launch": {
+    "Python:  Hello": {
+      "adapter": "debugpy",
+      "configuration": {
+        "name": "Python: Launch",
+        "type": "python",
+        "request": "launch",
+        "python": "~/miniconda3/bin/python",
+        "stopOnEntry": true,
+        "console": "externalTerminal",
+        "debugOptions": [],
+        "program": "${file}"
+      }
+    },
+    "Python:  Loop": {
       "adapter": "debugpy",
       "configuration": {
         "name": "Python: Launch",
