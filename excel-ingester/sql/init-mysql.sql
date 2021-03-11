@@ -7,3 +7,10 @@ CREATE TABLE accounts (
     last_login TIMESTAMP
 );
 
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
+GRANT ALL PRIVILEGES ON *.* TO 'user1'@'%';
+
+FLUSH PRIVILEGES;
+
+DROP USER ''@'localhost';
+DROP USER ''@'127.0.0.1';
