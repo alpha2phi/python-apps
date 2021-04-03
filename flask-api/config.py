@@ -22,7 +22,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SQLALCHEMY_DATABASE_URI = 'postgresql://root:password@localhost/myapp'
 SQLALCHEMY_DATABASE_URI = f"postgresql://{os.getenv('POSTGRES_USER')}:{os.getenv('POSTGRES_PASSWORD')}@{os.getenv('POSTGRES_HOST')}/{os.getenv('POSTGRES_DB')}"
 
-print(SQLALCHEMY_DATABASE_URI)
+FAB_API_SWAGGER_UI = True
 
 # Flask-WTF flag for CSRF
 CSRF_ENABLED = True
