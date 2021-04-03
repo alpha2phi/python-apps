@@ -1,3 +1,4 @@
+import datetime
 from flask_appbuilder import Model
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
@@ -17,9 +18,9 @@ Base = declarative_base()
 class Accounts(Base):
     __tablename__ = 'accounts'
 
-    UserId = Column(Integer, primary_key=True)
-    UserName = Column(String)
-    Password = Column(String)
-    Email = Column(String)
-    CreatedOn = Column(DateTime)
-    LastLogin = Column(DateTime)
+    userid = Column(Integer, primary_key=True)
+    username = Column(String)
+    password = Column(String)
+    email = Column(String)
+    createdon = Column(DateTime, default=datetime.datetime.utcnow)
+    lastlogin = Column(DateTime)
