@@ -1,2 +1,3 @@
 flask-appbuilder
 python-dotenv
+flask-cors

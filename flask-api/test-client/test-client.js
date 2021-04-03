@@ -1,9 +1,21 @@
-var RisonEncoder = require("./rison.js");
+var filter = {};
+filter.col = "email";
+filter.opr = "eq";
+filter.value = "alpha2phi@gmail.com";
 
-var rison = new RisonEncoder()
+var filters = [];
+filters.push(filter);
 
-console.log(rison.encode({any : "json", yes : true}));
-console.log(rison.encode_array([ "A", "B", {supportsObjects : true} ]));
-console.log(rison.encode_object({supportsObjects: true, ints: 435}));
-console.log(rison.encode_uri("http://www.abc.com"));
+filters_criteria = JSON.stringify({"filters" : filters});
+console.log(encodeURI(filters_criteria));
 
+const query = "http://localhost:5000/api/v1/accounts/?q=" + encodeURI(filters_criteria)
+const axios = require('axios');
+axios.get(query)
+  .then(response => {
+    console.log(response.data);
+    // console.log(response.data.explanation);
+  })
+  .catch(error => {
+    console.log(error);
+  });
