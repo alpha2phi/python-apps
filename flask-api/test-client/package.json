@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "axios": "^0.21.1"
+    "axios": "^0.21.1",
+    "faker": "^5.5.2"
   }
 }
