@@ -10,7 +10,7 @@ const query = gql`
 const endpoint = 'http://localhost:8088';
 
 request(endpoint, query).then((data) => {
-    console.log(data.screenshot);
-    const buffer = Buffer.from(data.screenshot, "base64");
-    fs.writeFileSync("screenshot.png", buffer);
+  console.log(data.screenshot);
+  const buffer = Buffer.from(data.screenshot, "base64");
+  fs.writeFileSync("screenshot.png", buffer);
 });

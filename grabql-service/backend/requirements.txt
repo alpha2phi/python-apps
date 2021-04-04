@@ -1,5 +1,5 @@
 Pillow
 fastapi
 playwright
-python-dotenv
+graphene>=2.0
 uvicorn
