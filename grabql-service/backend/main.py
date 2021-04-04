@@ -11,16 +11,6 @@ from playwright.sync_api import sync_playwright
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 
-def base64_encode_img(img):
-    buffered = BytesIO()
-    img.save(buffered, format="PNG")
-    buffered.seek(0)
-    img_byte = buffered.getvalue()
-    encoded_img = "data:image/png;base64," + base64.b64encode(
-        img_byte).decode()
-    return encoded_img
-
-
 class Query(graphene.ObjectType):
     screenshot = graphene.String(
         url=graphene.String(default_value="http://www.google.com"),
@@ -35,9 +25,10 @@ class Query(graphene.ObjectType):
             page = browser.new_page()
             page.set_viewport_size({"width": width, "height": height})
             page.goto(url)
-            img_byte = page.screenshot()
-            encoded_img = "data:image/png;base64," + base64.b64encode(
-                img_byte).decode()
+            img_byte = page.screenshot(full_page=True)
+            # encoded_img = "data:image/png;base64," + base64.b64encode(
+            # img_byte).decode()
+            encoded_img = base64.b64encode(img_byte).decode()
             browser.close()
             return encoded_img
 
