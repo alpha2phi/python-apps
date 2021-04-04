@@ -1,4 +1,5 @@
-fastapi
-uvicorn
-python-dotenv
 Pillow
+fastapi
+playwright
+python-dotenv
+uvicorn
