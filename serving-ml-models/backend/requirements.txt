@@ -5,3 +5,7 @@ python-multipart
 torch
 torchvision
 uvicorn
+paddlepaddle
+ppgan
+dlib
+insightface
