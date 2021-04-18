@@ -1,0 +1,3 @@
+[submodule "serving-ml-models/backend/insightface"]
+	path = serving-ml-models/backend/insightface
+	url = https://github.com/deepinsight/insightface.git
