@@ -7,7 +7,7 @@ sys.path.append(str(root))
 
 try:
     sys.path.remove(str(parent))
-except ValueError: 
+except ValueError:
     pass
 
 import streamlit as st
@@ -16,21 +16,28 @@ import validators
 from model.dcgan import dcgan
 from model.pgan import pgan
 from model.resnext import resnext
+from model.photo_2_cartoon import photo_2_cartoon
+from model.retinaface_anticov import retinaface_anticov
 
 model_pages = {
     "DCGAN": dcgan,
     "PGAN": pgan,
     "RESNEXT": resnext,
+    "Photo2Cartoon": photo_2_cartoon,
+    "RetinaFaceAntiCov": retinaface_anticov,
 }
 
 intro = """
 This app serves a number of machine learning models using FastAPI and Streamlit.
 """
 
+
 def draw_main_page():
     st.write(f"""
     # Welcome to my machine learning playground! 👋
     """)
+    st.text("")
+    st.text("")
 
     st.write(intro)
 

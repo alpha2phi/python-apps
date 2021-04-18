@@ -9,3 +9,4 @@ paddlepaddle
 ppgan
 dlib
 mxnet
+opencv-python

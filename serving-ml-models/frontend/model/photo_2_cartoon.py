@@ -4,17 +4,17 @@ import requests
 import streamlit as st
 from PIL import Image
 
-server_url = f"http://backend:8088/resnext"
+server_url = f"http://backend:8088/photo2cartoon"
 
 
-def resnext():
-    st.title("RESNEXT - Next Generation ResNet, More Efficient and Accurate")
+def photo_2_cartoon():
+    st.title("Photo2Cartoon - Convert Photo to Cartoon")
     st.text("")
     st.text("")
-    st.write("""Serving RESNEXT model using FastAPI and Streamlit.""")
+    st.write("""Serving Photo2Cartoon model using FastAPI and Streamlit.""")
     uploaded_image = st.file_uploader("Upload Image")
 
-    if st.button("Predict"):
+    if st.button("Convert"):
         if uploaded_image is not None:
             # File details
             file_details = {
@@ -36,9 +36,8 @@ def resnext():
 
             # Post to server
             res = requests.post(server_url, files=files)
-            # processed_image = Image.open(io.BytesIO(res.content))
-            # col2.image(processed_image, use_column_width=True)
-            col2.header("Prediction")
-            col2.json(str(res.content.decode("utf-8")))
+            col2.header("Cartoon")
+            processed_image = Image.open(io.BytesIO(res.content))
+            col2.image(processed_image, use_column_width=True)
         else:
             st.write("Upload image!")

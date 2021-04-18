@@ -6,9 +6,15 @@ COPY requirements.txt /fastapi
 
 WORKDIR /fastapi
 
-RUN pip install -r requirements.txt
-
 COPY . /fastapi
+
+RUN apt-get update -y
+
+RUN apt-get install build-essential cmake protobuf-compiler python3-opencv -y
+
+RUN cd /fastapi/detection/RetinaFace && make all
+
+RUN pip install -r requirements.txt
 
 EXPOSE 8088
 
