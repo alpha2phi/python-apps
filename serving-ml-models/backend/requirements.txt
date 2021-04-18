@@ -8,4 +8,3 @@ uvicorn
 paddlepaddle
 ppgan
 dlib
-insightface
