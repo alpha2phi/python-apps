@@ -1,7 +1,13 @@
 import unittest
 import cv2
 from ppgan.apps import Photo2CartoonPredictor
-from insightface.detection.RetinaFaceAntiCov.retinaface_cov import RetinaFaceCoV
+from detection.RetinaFaceAntiCov.retinaface_cov import RetinaFaceCoV
+
+import sys
+import numpy as np
+import datetime
+import os
+import glob
 
 
 class TestModels(unittest.TestCase):
@@ -14,7 +20,13 @@ class TestModels(unittest.TestCase):
         print(type(image))
 
     def test_retinaface_anti_cov_face_detector(self):
-        pass
+        thresh = 0.8
+        mask_thresh = 0.2
+        scales = [640, 1080]
+        count = 1
+        gpuid = -1
+        detector = RetinaFaceCoV('backend/model/pre-trained/mnet_cov2', 0,
+                                 gpuid, 'net3l')
 
 
 if __name__ == '__main__':
