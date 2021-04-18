@@ -1,7 +1,7 @@
 import unittest
 import cv2
 from ppgan.apps import Photo2CartoonPredictor
-from retinaface_cov import RetinaFaceCoV
+from insightface.detection.RetinaFaceAntiCov.retinaface_cov import RetinaFaceCoV
 
 
 class TestModels(unittest.TestCase):

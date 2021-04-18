@@ -8,3 +8,4 @@ uvicorn
 paddlepaddle
 ppgan
 dlib
+mxnet

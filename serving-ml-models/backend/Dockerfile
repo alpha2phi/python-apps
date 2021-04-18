@@ -6,6 +6,9 @@ COPY requirements.txt /fastapi
 
 WORKDIR /fastapi
 
+RUN git clone https://github.com/deepinsight/insightface
+RUN cd insightface/python-package && pip install -e .
+
 RUN pip install -r requirements.txt
 
 COPY . /fastapi
