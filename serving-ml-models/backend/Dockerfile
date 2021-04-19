@@ -13,6 +13,7 @@ RUN apt-get update -y
 RUN apt-get install build-essential cmake protobuf-compiler python3-opencv -y
 
 RUN cd /fastapi/detection/RetinaFace && make all
+RUN cd /fastapi/detection/RetinaFaceAntiCov && make all
 
 RUN pip install -r requirements.txt
 

@@ -10,3 +10,4 @@ ppgan
 dlib
 mxnet
 opencv-python
+cython

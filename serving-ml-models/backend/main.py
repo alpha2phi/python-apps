@@ -11,6 +11,7 @@ from model.dcgan import dcgan
 from model.pgan import pgan
 from model.resnext import resnext
 from model.photo_2_cartoon import photo_2_cartoon
+from model.retinaface_anticov import retinaface_anticov
 
 app = FastAPI(
     title="Serving Machine Learning Models",
@@ -53,6 +54,18 @@ def generate_dcgan():
 
 @app.post("/photo2cartoon")
 def generate_photo2cartoon(file: UploadFile = File(...)):
+    file_bytes = io.BytesIO(file.file.read())
+    image = Image.open(file_bytes)
+    name = f"/data/{str(uuid.uuid4())}.jpg"
+    image.save(name)
+    cartoon_image = photo_2_cartoon(file_bytes)
+    bytes_io = io.BytesIO()
+    cartoon_image.save(bytes_io, format="PNG")
+    return Response(bytes_io.getvalue(), media_type="image/png")
+
+
+@app.post("/retinaface_anticov")
+def detect_retinaface_anticov(file: UploadFile = File(...)):
     file_bytes = io.BytesIO(file.file.read())
     image = Image.open(file_bytes)
     name = f"/data/{str(uuid.uuid4())}.jpg"

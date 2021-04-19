@@ -1,3 +1,7 @@
+print("----------------------log")
+import pyximport
+pyximport.install()
+
 import numpy as np
 from ..cython.bbox import bbox_overlaps_cython
 #from rcnn.config import config
