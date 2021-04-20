@@ -1,6 +1,6 @@
-print("----------------------log")
-import pyximport
-pyximport.install()
+# print("----------------------log")
+# import pyximport
+# pyximport.install()
 
 import numpy as np
 from ..cython.bbox import bbox_overlaps_cython
@@ -86,7 +86,7 @@ def nonlinear_transform(ex_rois, gt_rois):
         return targets
     else:
         targets = [targets_dx, targets_dy, targets_dw, targets_dh]
-        #if config.USE_BLUR:
+        # if config.USE_BLUR:
         #  for i in range(4, gt_rois.shape[1]):
         #    t = gt_rois[:,i]
         #    targets.append(t)
@@ -106,15 +106,15 @@ def landmark_transform(ex_rois, gt_rois):
     targets = []
     for i in range(gt_rois.shape[1]):
         for j in range(gt_rois.shape[2]):
-            #if not config.USE_OCCLUSION and j==2:
+            # if not config.USE_OCCLUSION and j==2:
             #  continue
             if j == 2:
                 continue
-            if j == 0:  #w
+            if j == 0:  # w
                 target = (gt_rois[:, i, j] - ex_ctr_x) / (ex_widths + 1e-14)
-            elif j == 1:  #h
+            elif j == 1:  # h
                 target = (gt_rois[:, i, j] - ex_ctr_y) / (ex_heights + 1e-14)
-            else:  #visibile
+            else:  # visibile
                 target = gt_rois[:, i, j]
             targets.append(target)
 
