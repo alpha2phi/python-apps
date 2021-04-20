@@ -1,4 +1,4 @@
-[#](#) Serving Machine Learning Models
+# Serving Machine Learning Models
 
 The following models are currently being served
 
