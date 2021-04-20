@@ -55,9 +55,9 @@ def generate_dcgan():
 @app.post("/photo2cartoon")
 def generate_photo2cartoon(file: UploadFile = File(...)):
     file_bytes = io.BytesIO(file.file.read())
-    image = Image.open(file_bytes)
-    name = f"/data/{str(uuid.uuid4())}.jpg"
-    image.save(name)
+    # image = Image.open(file_bytes)
+    # name = f"/data/{str(uuid.uuid4())}.jpg"
+    # image.save(name)
     cartoon_image = photo_2_cartoon(file_bytes)
     bytes_io = io.BytesIO()
     cartoon_image.save(bytes_io, format="PNG")
@@ -67,12 +67,12 @@ def generate_photo2cartoon(file: UploadFile = File(...)):
 @app.post("/retinaface_anticov")
 def detect_retinaface_anticov(file: UploadFile = File(...)):
     file_bytes = io.BytesIO(file.file.read())
-    image = Image.open(file_bytes)
-    name = f"/data/{str(uuid.uuid4())}.jpg"
-    image.save(name)
-    cartoon_image = photo_2_cartoon(file_bytes)
+    # image = Image.open(file_bytes)
+    # name = f"/data/{str(uuid.uuid4())}.jpg"
+    # image.save(name)
+    processed_image = retinaface_anticov(file_bytes)
     bytes_io = io.BytesIO()
-    cartoon_image.save(bytes_io, format="PNG")
+    processed_image.save(bytes_io, format="PNG")
     return Response(bytes_io.getvalue(), media_type="image/png")
 
 
