@@ -1,0 +1,6 @@
+Pillow
+ariadne
+fastapi
+graphene
+starlette
+uvicorn
