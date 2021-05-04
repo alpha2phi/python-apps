@@ -7,7 +7,6 @@ from ariadne.asgi import GraphQL
 app = FastAPI()
 
 # ariadne copied from https://ariadnegraphql.org/docs/subscriptions
-
 type_def = """
     type Query {
         _unused: Boolean
@@ -38,4 +37,4 @@ schema = make_executable_schema(type_def, subscription)
 app.mount("/graphql", GraphQL(schema, debug=True))
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8088)
