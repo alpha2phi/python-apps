@@ -3,6 +3,10 @@ import Webcam from "react-webcam";
 import styled from "styled-components";
 import config from "../config/config";
 import { useFormFields } from "../libs/hooksLib";
+import { split, HttpLink } from '@apollo/client';
+import { getMainDefinition } from '@apollo/client/utilities';
+import { WebSocketLink } from '@apollo/client/link/ws';
+import { ApolloClient, InMemoryCache, gql, useSubscription } from '@apollo/client';
 
 const Wrapper = styled.div`
   display: block;
@@ -31,81 +35,125 @@ const Select = styled.select`
 `;
 
 export default function Viewer() {
-  const [fields, handleFieldChange] = useFormFields({
-    style: "2",
-  });
-  const webcamRef = useRef(null);
-  const [cartoonImg, setCartoonImg] = useState(null);
+	const [fields, handleFieldChange] = useFormFields({
+		style: "2",
+	});
+	const webcamRef = useRef(null);
+	const [cartoonImg, setCartoonImg] = useState(null);
 
-  const [isPaused, setPause] = useState(false);
-  const ws = useRef(null);
+	const [isPaused, setPause] = useState(false);
+	const client = useRef(null);
 
-  useEffect(() => {
-    setPause(false);
-    const client_id = Date.now();
-    const url = `${config.WS_SERVER}/${client_id}`;
-    console.log(url);
-    ws.current = new WebSocket(url);
-    ws.current.onopen = () => console.log("ws opened");
-    ws.current.onclose = () => console.log("ws closed");
+	const clientId = Date.now();
 
-    return () => {
-      ws.current.close();
-    };
-  }, []);
+	const MESSAGE_SUBSCRIPTION = gql`
+		subscription OnMessageReceived($clientId: String!) {
+			messageReceived(clientId: $clientId) {
+				content
+			}
+		}
+	`;
 
-  useEffect(() => {
-    if (!ws.current) return;
+	const GetMessage = ({ clientId }) => {
+		const { data: { messageReceived }, loading } = useSubscription(
+			MESSAGE_SUBSCRIPTION,
+    { variables: { clientId } }
+		);
+		return {!loading && messageReceived.content};
+	}
 
-    ws.current.onmessage = (event) => {
-      if (isPaused) return;
-      const message = JSON.parse(event.data);
-      setCartoonImg(message.output);
-      console.log(message);
-    };
-  }, [isPaused]);
+	useEffect(() => {
+		setPause(false);
+		const wsLink = new WebSocketLink({
+			uri: `${config.WS_SERVER}`,
+			options: {
+				reconnect: true
+			}
+		});
+		const httpLink = new HttpLink({
+			uri: `${config.HTTP_SERVER}`
+		});
+		const splitLink = split(
+			({ query }) => {
+				const definition = getMainDefinition(query);
+				return (
+					definition.kind === 'OperationDefinition' &&
+					definition.operation === 'subscription'
+				);
+			},
+			wsLink,
+			httpLink,
+		);
+		client.current = new ApolloClient({
+			link: splitLink,
+			cache: new InMemoryCache()
+		});
 
-  function sendMessage(msg) {
-    if (!ws.current) return;
 
-    ws.current.send(msg);
-  }
+		// console.log(url);
+		// ws.current = new WebSocket(url);
+		// ws.current.onopen = () => console.log("ws opened");
+		// ws.current.onclose = () => console.log("ws closed");
 
-  const videoConstraints = {
-    width: 1280,
-    height: 720,
-    facingMode: "environment", // Can be "environment" or "user"
-    screenshotQuality: 1,
-  };
+		// return () => {
+		//   ws.current.close();
+		// };
+	}, []);
 
-  const capture = useCallback(() => {
-    const capturedImg = webcamRef.current.getScreenshot();
+	// useEffect(() => {
+	//   if (!ws.current) return;
+	//   ws.current.onmessage = (event) => {
+	//     if (isPaused) return;
+	//     const message = JSON.parse(event.data);
+	//     setCartoonImg(message.output);
+	//     console.log(message);
+	//   };
+	// }, [isPaused]);
 
-    const data = JSON.stringify({ data: capturedImg, style: fields.style });
-    sendMessage(data);
-  }, [webcamRef, fields]);
+	// function sendMessage(msg) {
+	//   if (!ws.current) return;
 
-  return (
-    <Wrapper>
-      <Webcam
-        audio={false}
-        ref={webcamRef}
-        screenshotFormat="image/jpeg"
-        width="50%"
-        videoConstraints={videoConstraints}
-      />
-      <p>
-        Select Style:
+	// ws.current.send(msg);
+	// }
+
+	const videoConstraints = {
+		width: 1280,
+		height: 720,
+		facingMode: "environment", // Can be "environment" or "user"
+		screenshotQuality: 1,
+	};
+
+	const capture = useCallback(() => {
+		const capturedImg = webcamRef.current.getScreenshot();
+		const data = JSON.stringify({ data: capturedImg, style: fields.style });
+		// sendMessage(data);
+	}, [webcamRef, fields]);
+
+	return (
+
+		<Wrapper>
+			<Webcam
+				audio={false}
+				ref={webcamRef}
+				screenshotFormat="image/jpeg"
+				width="50%"
+				videoConstraints={videoConstraints}
+			/>
+
+			<p>
+				Select Style:
         <Select id="style" onChange={handleFieldChange} value={fields.style}>
-          <option value="0">Hayao</option>
-          <option value="1">Hosoda</option>
-          <option value="2">Paprika</option>
-          <option value="3">Shinkai</option>
-        </Select>
-        <br />
-        <button onClick={capture}>Capture photo</button>
-      </p>
-      {cartoonImg && <img alt="Cartoon" src={cartoonImg} width="50%" />}
-    </Wrapper>
-  );
+					<option value="0">Hayao</option>
+					<option value="1">Hosoda</option>
+					<option value="2">Paprika</option>
+					<option value="3">Shinkai</option>
+				</Select>
+				<br />
+				<button onClick={capture}>Capture photo</button>
+			</p>
+
+			{cartoonImg && <img alt="Cartoon" src={cartoonImg} width="50%" />}
+
+		</Wrapper>
+	);
 }

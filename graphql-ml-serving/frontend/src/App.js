@@ -9,7 +9,7 @@ function Page() {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
-        <h1>Camera</h1>
+        <h1>Serving ML Model using GraphQL</h1>
         <Viewer />
       </div>
     </ThemeProvider>

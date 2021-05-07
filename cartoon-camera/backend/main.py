@@ -14,7 +14,6 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 from cartoon import cartoonify
 
-
 # FastAPI
 app = FastAPI(
     title="Cartoon Camera",
@@ -25,7 +24,6 @@ app = FastAPI(
 
 class ConnectionManager:
     """Web socket connection manager."""
-
     def __init__(self):
         self.active_connections: List[WebSocket] = []
 
@@ -52,7 +50,8 @@ def base64_encode_img(img):
     img.save(buffered, format="PNG")
     buffered.seek(0)
     img_byte = buffered.getvalue()
-    encoded_img = "data:image/png;base64," + base64.b64encode(img_byte).decode()
+    encoded_img = "data:image/png;base64," + base64.b64encode(
+        img_byte).decode()
     return encoded_img
 
 
@@ -62,7 +61,7 @@ def process_incoming_request(payload):
     style = parsed_data["style"]
 
     # Convert to PIL image
-    image = data[data.find(",") + 1 :]
+    image = data[data.find(",") + 1:]
     dec = base64.b64decode(image + "===")
     image = Image.open(BytesIO(dec))
 
