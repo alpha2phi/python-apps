@@ -13,10 +13,10 @@ export default function Viewer() {
 	const webcamRef = useRef(null);
 	const [img, setImg] = useState(null);
 	const [isPaused, setPause] = useState(false);
-	const clientId = Date.now();
+	const clientId = Date.now().toString();
 
 	const CREATE_MESSAGE = gql`
-		mutation {
+		mutation createMessage($clientId: String!, $content: String!) {
 			createMessage(clientId: $clientId, content: $content) {
 				message {
 					content
@@ -28,10 +28,22 @@ export default function Viewer() {
 	`;
 	const [createMessage, { data }] = useMutation(CREATE_MESSAGE);
 
+	const CapturePhoto = (message) => {
+		const {loading, error, data} = createMessage({ variables: { clientId: clientId, content: message} });
+
+		if (loading) console.log("Sending...");
+		if (error) console.log("Error sending message..");
+
+		return (
+			<p>
+				<button onClick={capture}>Capture photo</button>
+			</p>
+		)
+	}
+
 	useEffect(() => {
 		setPause(false);
 
-		createMessage({ variables: { clientId: clientId, content: "from web app"} })
 	}, []);
 
 	const videoConstraints = {
@@ -44,8 +56,7 @@ export default function Viewer() {
 	const capture = useCallback(() => {
 		const capturedImg = webcamRef.current.getScreenshot();
 		const data = JSON.stringify({ data: capturedImg });
-
-
+		// SendMessage(data);
 	}, [webcamRef]);
 
 	return (
@@ -59,11 +70,9 @@ export default function Viewer() {
 				videoConstraints={videoConstraints}
 			/>
 
-			<p>
-				<button onClick={capture}>Capture photo</button>
-			</p>
 
 			{img && <img alt="Cartoon" src={img} width="50%" />}
+
 
 		</Wrapper>
 	);
