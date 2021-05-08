@@ -1,50 +1,69 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import Webcam from "react-webcam";
 import styled from "styled-components";
-import { gql, useMutation } from '@apollo/client';
+import { gql, useMutation, useSubscription } from '@apollo/client';
 
 const Wrapper = styled.div`
   display: block;
   margin: 0 auto;
 `;
 
+const clientId = Date.now().toString();
+
+const CREATE_MESSAGE = gql`
+mutation createMessage($clientId: String!, $content: String!) {
+	createMessage(clientId: $clientId, content: $content) {
+		message {
+			content
+		}
+		success
+		errors
+	}
+}
+`;
+
+const REGISTER_CLIENT = gql`
+mutation createClient($clientId: String!) {
+	createClient(clientId: $clientId) {
+		client {
+			clientId
+		}
+		success
+		errors
+	}
+}
+`;
+
+const RECEIVE_MESSAGE = gql`
+subscription messages($clientId: String!) {
+	messages(clientId: $clientId) {
+		content
+		clientId
+	}
+}
+`;
+
+const ReceiveMessage = () => {
+	const { data, loading, error } = useSubscription(RECEIVE_MESSAGE, { variables: { clientId: clientId } });
+
+	if (loading) {
+		return "";
+	}
+	if (error) {
+		console.error(error);
+		return <h4>Error processing</h4>;
+	}
+	var content = "";
+	if (data) {
+		content = data.messages.content;
+	}
+	console.log("recieve----", content.length);
+	return <img alt="result" src={content} width={"50%"}/>
+}
 
 export default function Viewer() {
 	const webcamRef = useRef(null);
-	const [img, setImg] = useState(null);
-	const [isPaused, setPause] = useState(false);
-	const clientId = Date.now().toString();
-
-	const CREATE_MESSAGE = gql`
-		mutation createMessage($clientId: String!, $content: String!) {
-			createMessage(clientId: $clientId, content: $content) {
-				message {
-					content
-				}
-				success
-				errors
-			}
-		}
-	`;
-	const [createMessage, { data }] = useMutation(CREATE_MESSAGE);
-
-	const CapturePhoto = (message) => {
-		const {loading, error, data} = createMessage({ variables: { clientId: clientId, content: message} });
-
-		if (loading) console.log("Sending...");
-		if (error) console.log("Error sending message..");
-
-		return (
-			<p>
-				<button onClick={capture}>Capture photo</button>
-			</p>
-		)
-	}
-
-	useEffect(() => {
-		setPause(false);
-
-	}, []);
+	const [status, setStatus] = useState("Status");
 
 	const videoConstraints = {
 		width: 1280,
@@ -53,11 +72,28 @@ export default function Viewer() {
 		screenshotQuality: 1,
 	};
 
+	const [createMessage] = useMutation(CREATE_MESSAGE, {
+		onError: (err) => console.error(err),
+		onCompleted: () => setStatus("Request sent")
+	});
+
 	const capture = useCallback(() => {
 		const capturedImg = webcamRef.current.getScreenshot();
 		const data = JSON.stringify({ data: capturedImg });
-		// SendMessage(data);
-	}, [webcamRef]);
+		console.log('sending ----');
+		createMessage({ variables: { clientId: clientId, content: data } });
+	}, [webcamRef, createMessage]);
+
+
+	const [registerClient] = useMutation(REGISTER_CLIENT, {
+		onError: (err) => console.error(err),
+		onCompleted: (result) => setStatus(`Registered with ${result.createClient.client.clientId}`)
+	});
+	useEffect(() => {
+		registerClient({ variables: { clientId: clientId } });
+	}, [registerClient]);
+
+
 
 	return (
 
@@ -70,10 +106,11 @@ export default function Viewer() {
 				videoConstraints={videoConstraints}
 			/>
 
-
-			{img && <img alt="Cartoon" src={img} width="50%" />}
-
-
+			<h3>{status}</h3>
+			<p>
+				<button onClick={capture}>Capture photo</button>
+			</p>
+			<ReceiveMessage />
 		</Wrapper>
 	);
 }

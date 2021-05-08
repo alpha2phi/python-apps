@@ -9,7 +9,6 @@ mutation = MutationType()
 @convert_kwargs_to_snake_case
 async def resolve_create_message(obj, info, content, client_id):
     try:
-        logging.info(f"Received from {client_id}: {len(content)}")
         message = {"content": content, "client_id": client_id}
         messages.append(message)
         await queue.put(message)
