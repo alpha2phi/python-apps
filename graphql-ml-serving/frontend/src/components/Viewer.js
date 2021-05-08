@@ -57,7 +57,6 @@ const ReceiveMessage = () => {
 	if (data) {
 		content = data.messages.content;
 	}
-	console.log("recieve----", content.length);
 	return <img alt="result" src={content} width={"50%"}/>
 }
 
@@ -80,7 +79,6 @@ export default function Viewer() {
 	const capture = useCallback(() => {
 		const capturedImg = webcamRef.current.getScreenshot();
 		const data = JSON.stringify({ data: capturedImg });
-		console.log('sending ----');
 		createMessage({ variables: { clientId: clientId, content: data } });
 	}, [webcamRef, createMessage]);
 

@@ -5,3 +5,5 @@ fastapi
 graphene
 starlette
 uvicorn
+paddlepaddle
+opencv-python
