@@ -1,9 +1,11 @@
 Pillow
-websockets
 ariadne
+dlib
 fastapi
 graphene
+opencv-python
+paddlepaddle
+ppgan
 starlette
 uvicorn
-paddlepaddle
-opencv-python
+websockets

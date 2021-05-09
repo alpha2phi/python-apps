@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import Webcam from "react-webcam";
 import styled from "styled-components";
-import { gql, useMutation, useSubscription } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
+import ImageViewer from "./ImageViewer";
 
 const Wrapper = styled.div`
   display: block;
@@ -34,32 +35,6 @@ mutation createClient($clientId: String!) {
 }
 `;
 
-const RECEIVE_MESSAGE = gql`
-subscription messages($clientId: String!) {
-	messages(clientId: $clientId) {
-		content
-		clientId
-	}
-}
-`;
-
-const ReceiveMessage = () => {
-	const { data, loading, error } = useSubscription(RECEIVE_MESSAGE, { variables: { clientId: clientId } });
-
-	if (loading) {
-		return "";
-	}
-	if (error) {
-		console.error(error);
-		return <h4>Error processing</h4>;
-	}
-	var content = "";
-	if (data) {
-		content = data.messages.content;
-	}
-	return <img alt="result" src={content} width={"50%"}/>
-}
-
 export default function Viewer() {
 	const webcamRef = useRef(null);
 	const [status, setStatus] = useState("Status");
@@ -78,8 +53,7 @@ export default function Viewer() {
 
 	const capture = useCallback(() => {
 		const capturedImg = webcamRef.current.getScreenshot();
-		const data = JSON.stringify({ data: capturedImg });
-		createMessage({ variables: { clientId: clientId, content: data } });
+		createMessage({ variables: { clientId: clientId, content: capturedImg } });
 	}, [webcamRef, createMessage]);
 
 
@@ -91,10 +65,7 @@ export default function Viewer() {
 		registerClient({ variables: { clientId: clientId } });
 	}, [registerClient]);
 
-
-
 	return (
-
 		<Wrapper>
 			<Webcam
 				audio={false}
@@ -108,7 +79,7 @@ export default function Viewer() {
 			<p>
 				<button onClick={capture}>Capture photo</button>
 			</p>
-			<ReceiveMessage />
+			<ImageViewer clientId={clientId} />
 		</Wrapper>
 	);
 }

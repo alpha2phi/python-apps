@@ -1,8 +1,10 @@
 FROM tiangolo/uvicorn-gunicorn:python3.8-slim
 
-RUN apt-get update
+RUN apt-get update -y
 
 RUN python -m pip install --upgrade pip
+
+RUN apt-get install build-essential cmake protobuf-compiler python3-opencv -y
 
 RUN mkdir /fastapi
 
