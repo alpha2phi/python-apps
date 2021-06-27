@@ -1,5 +1,3 @@
-import json
-
 import boto3
 import numpy as np
 import pandas as pd
@@ -19,7 +17,15 @@ with open("test_data/test_data_cleaned.csv") as f:
         response = runtime.invoke_endpoint(
             EndpointName=endpoint, ContentType='csv', Body=line,
             Accept='Accept')
-        prediction = response['Body'].read().decode("utf-8")[0]
+        prediction = response['Body'].read().decode("utf-8")
         predictions = ",".join([predictions, prediction])
 
-print(predictions)
+predictions =  np.fromstring(predictions[1:], sep=",")
+
+print(pd.crosstab(
+    index=df["y_yes"],
+    columns=np.round(predictions),
+    rownames=["actuals"],
+    colnames=["predictions"],
+))
+
