@@ -1,2 +1,4 @@
-pandas
 boto3
+dash
+pandas
+requests
