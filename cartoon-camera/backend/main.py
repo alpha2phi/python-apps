@@ -5,14 +5,17 @@ import logging
 import sys
 from typing import List
 import uuid
+
 from PIL import Image
-from starlette.responses import Response
+
+from cartoon import cartoonify
 from fastapi import FastAPI, File, UploadFile, WebSocket, WebSocketDisconnect
+from starlette.responses import Response
 import uvicorn
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
-from cartoon import cartoonify
+
 
 # FastAPI
 app = FastAPI(
