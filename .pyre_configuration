@@ -1,0 +1,6 @@
+{
+  "source_directories": [
+    "."
+  ],
+  "taint_models_path": "/home/alpha2phi/miniconda3/lib"
+}
