@@ -4,7 +4,6 @@
 Python apps developed for my [Medium articles](https://alpha2phi.medium.com/) covering coding tips, data science and machine learning.
 
 
-
 ## Demo
 
 You can find the sample code in the respective application folders.
