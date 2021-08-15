@@ -1,7 +1,25 @@
-# python-apps
 
-* *excel_ingester* - A [generic file ingestion framework](https://alpha2phi.medium.com/python-generic-data-ingestion-framework-7c1d8f5430ce). Check out [alphalib](https://alpha2phi.medium.com/literate-programming-using-jupyter-notebook-4c2520d71597) for the latest version developed using a literate programming approach.
+# Python Applications
 
-* *etl-dagster* - A generic ETL framework developed using [alphalib](https://alpha2phi.medium.com/literate-programming-using-jupyter-notebook-4c2520d71597) and dagster.
+Python apps developed for my [Medium articles](https://alpha2phi.medium.com/) covering coding tips, data science and machine learning.
 
-* *serving-ml-models* - [Serving machine learning models](https://alpha2phi.medium.com/serving-machine-learning-models-dcgan-pgan-resnext-using-fastapi-and-streamlit-2ef426f2e9de) using FastAPI and Streamlit.
+
+
+## Demo
+
+You can find the sample code in the respective application folders.
+
+  
+## About Me
+Software engineer, Data Science and ML practitioner.
+
+## Authors
+
+- [@alpha2phi](https://www.github.com/alpha2phi)
+
+  
+## Badges
+
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
+
+  
