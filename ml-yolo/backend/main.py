@@ -1,20 +1,21 @@
-import io
-import json
 import base64
-import uuid
+import io
+from io import BytesIO
+import json
 import logging
 import sys
-import uvicorn
 from typing import List
+import uuid
+
 from PIL import Image
-from io import BytesIO
-from starlette.responses import Response
+
 from fastapi import FastAPI, File, UploadFile, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
+from model import yolov5
+from starlette.responses import Response
+import uvicorn
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
-
-from model import yolov5
 
 
 # FastAPI
