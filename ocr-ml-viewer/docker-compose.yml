@@ -1,0 +1,47 @@
+version: "3"
+
+services:
+  backend:
+    build: backend
+    restart: always
+    ports:
+      - 8088:8088
+      - 5678:5678
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+      - apparmor:unconfined
+    networks:
+      - app_network
+    container_name: backend
+    env_file:
+      - .env
+    volumes:
+      - ./data:/data
+      - ./backend:/fastapi
+
+  frontend:
+    build: frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - 3000:3000
+    networks:
+      - app_network
+    container_name: frontend
+    env_file:
+      - .env
+    volumes:
+      - ./data:/data
+      - ./frontend:/app
+      - /app/node_modules
+
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  data:
+    name: data
