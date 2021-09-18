@@ -8,9 +8,9 @@ const Wrapper = styled.div`
   margin: 0 auto;
 `;
 
-const Extracted = styled.div`
-  white-space: pre-wrap;
-`;
+// const Extracted = styled.div`
+//   white-space: pre-wrap;
+// `;
 
 export default function Viewer() {
   const webcamRef = useRef(null);
@@ -24,10 +24,10 @@ export default function Viewer() {
     setPause(false);
     const client_id = Date.now();
     const url = `${config.WS_SERVER}/${client_id}`;
-    console.log(url);
+    // console.log(url);
     ws.current = new WebSocket(url);
-    ws.current.onopen = () => console.log("ws opened");
-    ws.current.onclose = () => console.log("ws closed");
+    // ws.current.onopen = () => console.log("ws opened");
+    // ws.current.onclose = () => console.log("ws closed");
 
     return () => {
       ws.current.close();
@@ -40,8 +40,11 @@ export default function Viewer() {
     ws.current.onmessage = (event) => {
       if (isPaused) return;
       const message = JSON.parse(event.data);
-      console.log(message);
-      setExtracted(message["extracted"]);
+      // console.log(message);
+      var text = message["extracted"];
+      var img = message["processed_img"];
+      setExtracted(text);
+      setCapturedImg(img);
     };
   }, [isPaused]);
 
@@ -82,9 +85,12 @@ export default function Viewer() {
         <img alt="Extracted text" src={capturedImg} width="80%" />
       )}
 
-      <h3>
-        <Extracted>{extracted && extracted}</Extracted>
-      </h3>
+      <textarea
+        readOnly={true}
+        rows="10"
+        cols="100"
+        value={extracted}
+      ></textarea>
     </Wrapper>
   );
 }

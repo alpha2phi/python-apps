@@ -5,6 +5,7 @@ import sys
 from io import BytesIO
 from typing import List
 
+import numpy as np
 import uvicorn
 from fastapi import FastAPI, File, UploadFile, WebSocket, WebSocketDisconnect
 from ocr import recognizer
@@ -82,10 +83,13 @@ async def process_ocr_ws(websocket: WebSocket, client_id: int):
             # image.save("/data/capture.png")
 
             # Process the image
-            extracted_text = recognizer.recognize(image)
-            logging.info(f"{extracted_text =}")
+            result, processed_img = recognizer.recognize(image)
+            logging.info(f"{result =}")
+            processed_img = Image.fromarray(np.uint8(processed_img)).convert("RGB")
+            encoded_img = base64_encode_img(processed_img)
             result = {
-                "extracted": json.dumps(extracted_text),
+                "extracted": json.dumps(str(result)),
+                "processed_img": encoded_img,
             }
 
             # Send back the result
