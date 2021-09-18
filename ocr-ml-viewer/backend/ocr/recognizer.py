@@ -1,10 +1,9 @@
-from PIL import Image
-import pytesseract
+from paddleocr import PaddleOCR, draw_ocr
+
+ocr = PaddleOCR(use_angle_cls=True, lang="en", use_gpu=False)
 
 
-# def recognize(img, lang="eng+chi_sim"):
-def recognize(img, lang="eng"):
+def recognize(img):
     """Process a PIL image."""
-    extracted = pytesseract.image_to_string(img, lang=lang)
-    return extracted
-
+    result = ocr.ocr(img, cls=True)
+    return result

@@ -2,9 +2,9 @@ FROM tiangolo/uvicorn-gunicorn:python3.8-slim
 
 RUN apt-get update
 
-RUN python -m pip install --upgrade pip
+RUN apt-get install gcc python3-opencv -y
 
-RUN pip install "paddleocr>=2.0.1" 
+# RUN python -m pip install --upgrade pip
 
 RUN mkdir /fastapi
 

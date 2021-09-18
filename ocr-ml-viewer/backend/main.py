@@ -1,26 +1,21 @@
 import base64
-import io
 import json
 import logging
 import sys
-import uuid
 from io import BytesIO
 from typing import List
 
 import uvicorn
 from fastapi import FastAPI, File, UploadFile, WebSocket, WebSocketDisconnect
-from fastapi.responses import HTMLResponse
-from PIL import Image
-from starlette.responses import Response
-
 from ocr import recognizer
+from PIL import Image
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 
 # FastAPI
 app = FastAPI(
-    title="OCR Viewer",
+    title="ML OCR Viewer",
     description="""Visit port 8088/docs for the FastAPI documentation.""",
     version="0.0.1",
 )
