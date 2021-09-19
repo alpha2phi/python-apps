@@ -1,6 +1,5 @@
 import numpy as np
 from paddleocr import PaddleOCR, draw_ocr
-from PIL import Image
 
 ocr = PaddleOCR(use_angle_cls=True, lang="en", use_gpu=False)
 

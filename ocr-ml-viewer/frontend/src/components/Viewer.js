@@ -24,8 +24,9 @@ export default function Viewer() {
     setPause(false);
     const client_id = Date.now();
     const url = `${config.WS_SERVER}/${client_id}`;
-    // console.log(url);
     ws.current = new WebSocket(url);
+
+    // console.log(url);
     // ws.current.onopen = () => console.log("ws opened");
     // ws.current.onclose = () => console.log("ws closed");
 
