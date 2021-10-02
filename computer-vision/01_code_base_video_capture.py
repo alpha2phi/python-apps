@@ -2,7 +2,7 @@ import time
 import cv2
 
 
-def calculate_fps(img, pTime, pos=(50, 80), color=(0, 255, 0), scale=5, thickness=5):
+def calculate_fps(img, pTime, pos=(50, 80), color=(0, 255, 0), scale=4, thickness=4):
     cTime = time.time()
     fps = 1 / (cTime - pTime)
     pTime = cTime
@@ -20,26 +20,28 @@ def calculate_fps(img, pTime, pos=(50, 80), color=(0, 255, 0), scale=5, thicknes
 
 def show_video(capture):
     # cap = cv2.VideoCapture(0) # Capture from camera. Adjust the number
-    cap = cv2.VideoCapture()  # Capture from video
+    cap = cv2.VideoCapture(capture)  # Capture from video
 
-    pTime = time.time()
-    while True:
-        # Read from video capture device
-        success, img = cap.read()
+    try:
 
-        # FPS
-        pTime, img = calculate_fps(img, pTime)
+        pTime = time.time()
+        while cap.isOpened():
+            # Read from video capture device
+            success, img = cap.read()
 
-        # Show video
-        if img is not None:
-            cv2.imshow("Video", img)
+            # FPS
+            pTime, img = calculate_fps(img, pTime)
 
-        # Wait for key to exit
-        if cv2.waitKey(10) & 0xFF == ord("q"):
-            break
+            # Show video
+            if img is not None:
+                cv2.imshow("Video", img)
 
-    cap.release()
-    cv2.destroyAllWindows()
+            # Wait for key to exit
+            if cv2.waitKey(10) & 0xFF == ord("q"):
+                break
+    finally:
+        cap.release()
+        cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":
