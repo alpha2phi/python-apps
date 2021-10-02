@@ -78,7 +78,7 @@ with mp_face_mesh.FaceMesh(
                     landmark_drawing_spec=None,
                     connection_drawing_spec=mp_drawing_styles.get_default_face_mesh_contours_style(),
                 )
-        cv2.imshow("MediaPipe FaceMesh", image)
         if cv2.waitKey(5) & 0xFF == 27:
+        cv2.imshow("MediaPipe FaceMesh", image)
             break
 cap.release()
