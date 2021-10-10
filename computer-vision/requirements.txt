@@ -1,3 +1,4 @@
 mediapipe
 opencv-python
 fastai
+autopy
