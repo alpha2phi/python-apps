@@ -1,5 +1,5 @@
-import time
 import multiprocessing as mp
+import time
 
 
 def f():
@@ -12,7 +12,8 @@ def f():
 
 
 if __name__ == "__main__":
-    print("Looping...")
+    msg = "Looping"
+    print(msg)
     p = mp.Process(target=f)
     p.start()
     p.join()

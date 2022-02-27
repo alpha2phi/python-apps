@@ -1,0 +1,17 @@
+{
+  "configurations": {
+    "Python Debug Adapter": {
+      "adapter": "debugpy",
+      "configuration": {
+        "name": "Python: Launch",
+        "type": "python",
+        "request": "launch",
+        "python": "/home/alpha2phi/miniconda3/bin/python",
+        "stopOnEntry": true,
+        "console": "externalTerminal",
+        "debugOptions": [],
+        "program": "${file}"
+      }
+    }
+  }
+}
