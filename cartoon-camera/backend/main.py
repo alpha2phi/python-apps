@@ -1,17 +1,16 @@
 import base64
-from io import BytesIO
 import json
 import logging
 import sys
-from typing import List
 import uuid
+from io import BytesIO
+from typing import List
 
-from PIL import Image
-
+import uvicorn
 from cartoon import cartoonify
 from fastapi import FastAPI, File, UploadFile, WebSocket, WebSocketDisconnect
+from PIL import Image
 from starlette.responses import Response
-import uvicorn
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
