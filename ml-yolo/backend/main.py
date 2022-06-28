@@ -14,7 +14,6 @@ from model import yolov5
 from PIL import Image
 from starlette.responses import Response
 
-
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 
