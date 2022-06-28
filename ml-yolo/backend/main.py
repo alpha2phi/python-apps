@@ -88,7 +88,7 @@ async def process_yolov5_ws(websocket: WebSocket, client_id: int):
             data = await websocket.receive_text()
 
             # Convert to PIL image
-            image = data[data.find(",") + 1 :]
+            image = data[data.find(",") + 1:]
             dec = base64.b64decode(image + "===")
             image = Image.open(BytesIO(dec)).convert("RGB")
 
