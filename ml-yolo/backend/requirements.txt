@@ -14,13 +14,14 @@ tensorboard
 matplotlib
 seaborn
 
-
 # -- API
 fastapi
 uvicorn
 python-multipart
 python-dotenv
 
+# -- debugging
+debugpy
 
 # --- logging
 # wandb

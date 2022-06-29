@@ -4,6 +4,7 @@ FROM tiangolo/uvicorn-gunicorn:python3.8-slim
 RUN apt-get update
 RUN apt-get install ffmpeg libsm6 libxext6  -y
 RUN apt-get install git -y
+RUN apt-get install -y procps gdb
 
 RUN python -m pip install --upgrade pip
 
